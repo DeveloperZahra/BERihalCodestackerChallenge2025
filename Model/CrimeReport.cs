@@ -35,13 +35,13 @@ namespace BERihalCodestackerChallenge2025.Model
         public decimal? Latitude { get; set; } // Latitude of the crime location
 
         [Precision(9, 6)]
-        public decimal? Longitude { get; set; }
+        public decimal? Longitude { get; set; } // Longitude of the crime location
 
-        
-        [Required, MaxLength(32)]
+
+        [Required, MaxLength(32)] // Unique tracking code for the report
         [RegularExpression(@"^[A-Z]{2,4}-\d{4}-\d{3,6}$")] // CR-2025-001234
-        public string TrackingCode { get; set; } = default!;
+        public string TrackingCode { get; set; } = default!; // Unique tracking code for the report
 
-        public ICollection<CaseReport>? CaseLinks { get; set; }
+        public ICollection<CaseReport>? CaseLinks { get; set; } // Links to cases associated with this report
     }
 }
