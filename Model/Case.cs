@@ -9,23 +9,23 @@ namespace BERihalCodestackerChallenge2025.Model
     [Index(nameof(CaseNumber), IsUnique = true)] // Ensure case numbers are unique
     [Index(nameof(Status))] // Index on Status for faster queries
     [Index(nameof(AuthorizationLevel))] // Index on AuthorizationLevel for faster queries
-    public class Case
+    public class Case // Represents a case in the system
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } // Primary key
 
-        [Required, MaxLength(32)]
+        [Required, MaxLength(32)] // Unique case number
         [RegularExpression(@"^[A-Z]{3,6}-\d{4}-\d{1,6}$")] // CASE-2025-001
-        public string CaseNumber { get; set; } = default!;
+        public string CaseNumber { get; set; } = default!; // Unique case number
 
-        [Required, MaxLength(160)]
-        public string Name { get; set; } = default!;
+        [Required, MaxLength(160)] // Title of the case
+        public string Name { get; set; } = default!; // Short name/title of the case
 
-        [Required, MaxLength(4000)]
-        public string Description { get; set; } = default!;
+        [Required, MaxLength(4000)] // Detailed description of the case
+        public string Description { get; set; } = default!; // Full description of the case
 
-        [Required, MaxLength(120)]
-        public string AreaCity { get; set; } = default!;
+        [Required, MaxLength(120)] // Location details
+        public string AreaCity { get; set; } = default!; // Area or city where the case is being handled
 
         [Required, MaxLength(80)]
         public string CaseType { get; set; } = "General";
