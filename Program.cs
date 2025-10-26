@@ -3,7 +3,7 @@ namespace BERihalCodestackerChallenge2025
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main(string[] args) // Entry point of the application
         {
             var builder = WebApplication.CreateBuilder(args);
 
