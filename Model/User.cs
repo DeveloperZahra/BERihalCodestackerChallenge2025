@@ -21,7 +21,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public string PasswordHash { get; set; } = default!;// Hashed password for security
 
         [Required]
-        public Role Role { get; set; }
+        public Role Role { get; set; } // User's role in the system
 
         [Required]
         public Clearance ClearanceLevel { get; set; } = Clearance.low;
