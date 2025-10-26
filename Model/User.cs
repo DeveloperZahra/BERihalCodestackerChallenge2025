@@ -4,7 +4,7 @@ using System.Data;
 
 namespace BERihalCodestackerChallenge2025.Model
 {
-    [Index(nameof(Username), IsUnique = true)] 
+    [Index(nameof(Username), IsUnique = true)] // Ensure usernames are unique
     [Index(nameof(Email), IsUnique = true)] 
     public class User // Represents a user in the system
     {
