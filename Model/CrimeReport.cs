@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace BERihalCodestackerChallenge2025.Model
 {
     [Index(nameof(Status))] // Index on Status for faster queries
-    [Index(nameof(TrackingCode), IsUnique = true)]
+    [Index(nameof(TrackingCode), IsUnique = true)] // Ensure tracking codes are unique
     public class CrimeReport
     {
         [Key]
