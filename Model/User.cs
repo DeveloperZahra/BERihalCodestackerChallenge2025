@@ -11,7 +11,7 @@ namespace BERihalCodestackerChallenge2025.Model
         [Key]
         public int Id { get; set; } // Primary key
 
-        [Required, MaxLength(64)]
+        [Required, MaxLength(64)] // Username must be unique
         public string Username { get; set; } = default!;
 
         [Required, MaxLength(128), EmailAddress]
