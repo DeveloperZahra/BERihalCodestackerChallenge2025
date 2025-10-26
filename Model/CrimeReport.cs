@@ -9,9 +9,9 @@ namespace BERihalCodestackerChallenge2025.Model
     public class CrimeReport // Represents a crime report submitted by a citizen
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } // Primary key
 
-        [Required, MaxLength(160)]
+        [Required, MaxLength(160)] // Title of the crime report
         public string Title { get; set; } = default!;
 
         [Required, MaxLength(4000)]
