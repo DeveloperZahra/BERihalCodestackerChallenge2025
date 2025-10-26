@@ -27,8 +27,8 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required, MaxLength(120)] // Location details
         public string AreaCity { get; set; } = default!; // Area or city where the case is being handled
 
-        [Required, MaxLength(80)]
-        public string CaseType { get; set; } = "General";
+        [Required, MaxLength(80)] // Type of the case
+        public string CaseType { get; set; } = "General"; // Type/category of the case
 
         [Required]
         public Clearance AuthorizationLevel { get; set; } = Clearance.low;
