@@ -6,7 +6,7 @@ namespace BERihalCodestackerChallenge2025.Model
 {
     [Index(nameof(Status))] // Index on Status for faster queries
     [Index(nameof(TrackingCode), IsUnique = true)] // Ensure tracking codes are unique
-    public class CrimeReport
+    public class CrimeReport // Represents a crime report submitted by a citizen
     {
         [Key]
         public int Id { get; set; }
