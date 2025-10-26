@@ -12,13 +12,13 @@ namespace BERihalCodestackerChallenge2025.Model
         public int Id { get; set; } // Primary key
 
         [Required, MaxLength(64)] // Username must be unique
-        public string Username { get; set; } = default!;
+        public string Username { get; set; } = default!; // User's unique username
 
-        [Required, MaxLength(128), EmailAddress]
-        public string Email { get; set; } = default!;
+        [Required, MaxLength(128), EmailAddress] // Email must be unique and valid format
+        public string Email { get; set; } = default!; // User's unique email address
 
         [Required] //  PBKDF2/BCrypt
-        public string PasswordHash { get; set; } = default!;
+        public string PasswordHash { get; set; } = default!;// Hashed password for security
 
         [Required]
         public Role Role { get; set; }
