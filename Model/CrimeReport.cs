@@ -31,15 +31,15 @@ namespace BERihalCodestackerChallenge2025.Model
         [ForeignKey(nameof(ReportedByUserId))] // Navigation property to the reporting user
         public User? ReportedByUser { get; set; } // The user who reported the crime
 
-        [Precision(9, 6)]
-        public decimal? Latitude { get; set; }
+        [Precision(9, 6)] 
+        public decimal? Latitude { get; set; } // Latitude of the crime location
 
         [Precision(9, 6)]
         public decimal? Longitude { get; set; }
 
-        // لتتبع المواطن
+        
         [Required, MaxLength(32)]
-        [RegularExpression(@"^[A-Z]{2,4}-\d{4}-\d{3,6}$")] // مثال CR-2025-001234
+        [RegularExpression(@"^[A-Z]{2,4}-\d{4}-\d{3,6}$")] // CR-2025-001234
         public string TrackingCode { get; set; } = default!;
 
         public ICollection<CaseReport>? CaseLinks { get; set; }
