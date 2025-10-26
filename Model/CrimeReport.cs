@@ -12,19 +12,19 @@ namespace BERihalCodestackerChallenge2025.Model
         public int Id { get; set; } // Primary key
 
         [Required, MaxLength(160)] // Title of the crime report
-        public string Title { get; set; } = default!;
+        public string Title { get; set; } = default!; // Short title of the report
 
-        [Required, MaxLength(4000)]
-        public string Description { get; set; } = default!;
+        [Required, MaxLength(4000)] // Detailed description of the crime
+        public string Description { get; set; } = default!; // Full description of the report
 
-        [Required, MaxLength(120)]
-        public string AreaCity { get; set; } = default!;
-
-        [Required]
-        public DateTime ReportDateTime { get; set; } = DateTime.UtcNow;
+        [Required, MaxLength(120)] // Location details
+        public string AreaCity { get; set; } = default!; // Area or city where the crime occurred
 
         [Required]
-        public ReportStatus Status { get; set; } = ReportStatus.pending;
+        public DateTime ReportDateTime { get; set; } = DateTime.UtcNow; // Date and time when the report was created
+
+        [Required]
+        public ReportStatus Status { get; set; } = ReportStatus.pending; // Current status of the report
 
         // Citizen = NULL
         public int? ReportedByUserId { get; set; }
