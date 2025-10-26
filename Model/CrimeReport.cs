@@ -27,9 +27,9 @@ namespace BERihalCodestackerChallenge2025.Model
         public ReportStatus Status { get; set; } = ReportStatus.pending; // Current status of the report
 
         // Citizen = NULL
-        public int? ReportedByUserId { get; set; }
-        [ForeignKey(nameof(ReportedByUserId))]
-        public User? ReportedByUser { get; set; }
+        public int? ReportedByUserId { get; set; } // Foreign key to the user who reported the crime
+        [ForeignKey(nameof(ReportedByUserId))] // Navigation property to the reporting user
+        public User? ReportedByUser { get; set; } // The user who reported the crime
 
         [Precision(9, 6)]
         public decimal? Latitude { get; set; }
