@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BERihalCodestackerChallenge2025", "BERihalCodestackerChallenge2025.csproj", "{0EF295BB-AF92-4779-8497-DB6289E5EE5E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EF295BB-AF92-4779-8497-DB6289E5EE5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EF295BB-AF92-4779-8497-DB6289E5EE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EF295BB-AF92-4779-8497-DB6289E5EE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EF295BB-AF92-4779-8497-DB6289E5EE5E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF08A02D-80AA-4797-8D5A-6EEA9B554879}
+	EndGlobalSection
+EndGlobal
