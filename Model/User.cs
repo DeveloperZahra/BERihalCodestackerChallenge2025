@@ -9,7 +9,7 @@ namespace BERihalCodestackerChallenge2025.Model
     public class User // Represents a user in the system
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } // Primary key
 
         [Required, MaxLength(64)]
         public string Username { get; set; } = default!;
