@@ -8,7 +8,7 @@ namespace BERihalCodestackerChallenge2025.Model
 {
     [Index(nameof(CaseNumber), IsUnique = true)] // Ensure case numbers are unique
     [Index(nameof(Status))] // Index on Status for faster queries
-    [Index(nameof(AuthorizationLevel))]
+    [Index(nameof(AuthorizationLevel))] // Index on AuthorizationLevel for faster queries
     public class Case
     {
         [Key]
