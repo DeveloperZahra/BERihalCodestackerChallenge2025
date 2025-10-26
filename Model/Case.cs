@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BERihalCodestackerChallenge2025.Model
 {
     [Index(nameof(CaseNumber), IsUnique = true)] // Ensure case numbers are unique
-    [Index(nameof(Status))]
+    [Index(nameof(Status))] // Index on Status for faster queries
     [Index(nameof(AuthorizationLevel))]
     public class Case
     {
