@@ -31,23 +31,23 @@ namespace BERihalCodestackerChallenge2025.Model
         public string CaseType { get; set; } = "General"; // Type/category of the case
 
         [Required]
-        public Clearance AuthorizationLevel { get; set; } = Clearance.low;
+        public Clearance AuthorizationLevel { get; set; } = Clearance.low; // Required clearance level to access the case
 
         [Required]
-        public CaseStatus Status { get; set; } = CaseStatus.pending;
+        public CaseStatus Status { get; set; } = CaseStatus.pending; // Current status of the case
 
         [Required]
-        public int CreatedByUserId { get; set; }
+        public int CreatedByUserId { get; set; } // Foreign key to the user who created the case
 
-        [ForeignKey(nameof(CreatedByUserId))]
-        public User CreatedByUser { get; set; } = default!;
+        [ForeignKey(nameof(CreatedByUserId))] // Navigation property to the creating user
+        public User CreatedByUser { get; set; } = default!; // The user who created the case
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp of case creation
 
-        public ICollection<CaseAssignee>? Assignees { get; set; }
-        public ICollection<Evidence>? Evidences { get; set; }
-        public ICollection<CaseParticipant>? Participants { get; set; }
-        public ICollection<CaseReport>? LinkedReports { get; set; }
+        public ICollection<CaseAssignee>? Assignees { get; set; } // Users assigned to the case
+        public ICollection<Evidence>? Evidences { get; set; } // Evidences linked to the case
+        public ICollection<CaseParticipant>? Participants { get; set; } //  Participants involved in the case
+        public ICollection<CaseReport>? LinkedReports { get; set; } // Reports linked to the case
     }
 }
