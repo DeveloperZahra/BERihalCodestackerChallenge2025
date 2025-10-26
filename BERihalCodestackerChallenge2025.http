@@ -1,0 +1,6 @@
+@BERihalCodestackerChallenge2025_HostAddress = http://localhost:5128
+
+GET {{BERihalCodestackerChallenge2025_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
