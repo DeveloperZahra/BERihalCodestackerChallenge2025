@@ -30,8 +30,8 @@ namespace BERihalCodestackerChallenge2025.Model
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp of user creation
 
 
-        public ICollection<Case>? CreatedCases { get; set; }
-        public ICollection<CaseAssignee>? CaseAssignments { get; set; }
+        public ICollection<Case>? CreatedCases { get; set; } // Cases created by the user
+        public ICollection<CaseAssignee>? CaseAssignments { get; set; } // Cases assigned to the user
     }
 
 }
