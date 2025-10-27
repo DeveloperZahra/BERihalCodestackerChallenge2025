@@ -20,7 +20,7 @@ namespace BERihalCodestackerChallenge2025.Model
 
         [Required, MaxLength(32)]
         [RegularExpression("^(add|update|soft_delete|hard_delete)$")] // Action performed on the evidence
-        public string Action { get; set; } = "add";
+        public string Action { get; set; } = "add"; // Action performed on the evidence
 
         [Required]
         public int ActedByUserId { get; set; }
