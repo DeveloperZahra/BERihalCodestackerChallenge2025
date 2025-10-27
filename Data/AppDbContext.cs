@@ -20,7 +20,7 @@ namespace BERihalCodestackerChallenge2025.Data
         public DbSet<Participant> Participants => Set<Participant>(); // DbSet for participants
         public DbSet<CaseParticipant> CaseParticipants => Set<CaseParticipant>(); // DbSet for case-participant links
         public DbSet<Evidence> Evidences => Set<Evidence>(); // DbSet for evidences
-        public DbSet<EvidenceAuditLog> EvidenceAuditLogs => Set<EvidenceAuditLog>();
+        public DbSet<EvidenceAuditLog> EvidenceAuditLogs => Set<EvidenceAuditLog>(); // DbSet for evidence audit logs
 
         protected override void OnModelCreating(ModelBuilder b)
         {
