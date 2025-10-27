@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using BERihalCodestackerChallenge2025.Model;
 
 namespace BERihalCodestackerChallenge2025.Model
 {

@@ -12,20 +12,21 @@ namespace BERihalCodestackerChallenge2025.Model
         [Key]
         public int Id { get; set; } // Primary key
 
+        [ForeignKey(nameof(EvidenceId))] // Navigation property to the associated evidence
         [Required]
         public int EvidenceId { get; set; } // Foreign key to the associated evidence
 
-        [ForeignKey(nameof(EvidenceId))] // Navigation property to the associated evidence
+        
         public Evidence Evidence { get; set; } = default!; // Navigation property to the associated evidence
 
         [Required, MaxLength(32)]
         [RegularExpression("^(add|update|soft_delete|hard_delete)$")] // Action performed on the evidence
         public string Action { get; set; } = "add"; // Action performed on the evidence
 
+        [ForeignKey(nameof(ActedByUserId))]
         [Required]
         public int ActedByUserId { get; set; } // Foreign key to the user who performed the action
 
-        [ForeignKey(nameof(ActedByUserId))]
         public User ActedByUser { get; set; } = default!; // Navigation property to the user who performed the action
 
         [Required]

@@ -1,8 +1,8 @@
-﻿using BERihalCodestackerChallenge2025.DTOs;
+﻿using AutoMapper;
+using BERihalCodestackerChallenge2025.DTOs;
+using BERihalCodestackerChallenge2025.Model;
 using System.Runtime;
-using System.Security.Policy;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using AutoMapper;
 
 namespace BERihalCodestackerChallenge2025.Mapping
 {

@@ -1,4 +1,5 @@
 
+using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.Mapping;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,6 +13,7 @@ namespace BERihalCodestackerChallenge2025
             
 
             var builder = WebApplication.CreateBuilder(args);
+
 
             // Add DbContext
             builder.Services.AddDbContext<AppDbContext>(options =>
