@@ -10,16 +10,16 @@ namespace BERihalCodestackerChallenge2025.Model
     public class EvidenceAuditLog // Represents an audit log entry for actions taken on evidence
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } // Primary key
 
         [Required]
-        public int EvidenceId { get; set; }
+        public int EvidenceId { get; set; } // Foreign key to the associated evidence
 
-        [ForeignKey(nameof(EvidenceId))]
-        public Evidence Evidence { get; set; } = default!;
+        [ForeignKey(nameof(EvidenceId))] // Navigation property to the associated evidence
+        public Evidence Evidence { get; set; } = default!; // Navigation property to the associated evidence
 
         [Required, MaxLength(32)]
-        [RegularExpression("^(add|update|soft_delete|hard_delete)$")]
+        [RegularExpression("^(add|update|soft_delete|hard_delete)$")] // Action performed on the evidence
         public string Action { get; set; } = "add";
 
         [Required]
