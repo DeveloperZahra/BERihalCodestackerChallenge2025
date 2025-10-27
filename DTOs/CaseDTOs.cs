@@ -21,4 +21,17 @@
         public string? AuthorizationLevel { get; set; }
         public string? Status { get; set; } // pending | ongoing | closed
     }
+
+    // DTO for list API (with smart trimmed description)
+    public class CaseListItemDto
+    {
+        public string CaseNumber { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; } // ≤100 chars (trimmed)
+        public string AreaCity { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string CaseType { get; set; }
+        public string AuthorizationLevel { get; set; }
+    }
 }
