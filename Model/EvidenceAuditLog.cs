@@ -29,7 +29,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public User ActedByUser { get; set; } = default!; // Navigation property to the user who performed the action
 
         [Required]
-        public DateTime ActedAt { get; set; } = DateTime.UtcNow;
+        public DateTime ActedAt { get; set; } = DateTime.UtcNow; // Timestamp of when the action was performed
 
         [MaxLength(2000)]
         public string? Details { get; set; }
