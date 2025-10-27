@@ -10,4 +10,20 @@
         public long? SizeBytes { get; set; }
         public string? Remarks { get; set; }
     }
+
+    // Dto for Evidence Read 
+    public class EvidenceReadDto
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string? TextContent { get; set; }
+        public string? FileUrl { get; set; }
+        public string? MimeType { get; set; }
+        public long? SizeBytes { get; set; }
+        public string? Remarks { get; set; }
+        public bool IsSoftDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string AddedBy { get; set; }
+    }
+
 }
