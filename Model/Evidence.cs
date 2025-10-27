@@ -10,26 +10,26 @@ namespace BERihalCodestackerChallenge2025.Model
     public class Evidence // Represents evidence linked to a case
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } // Primary key
 
         [Required]
-        public int CaseId { get; set; }
+        public int CaseId { get; set; } // Foreign key to the associated case
 
         [ForeignKey(nameof(CaseId))]
-        public Case Case { get; set; } = default!;
+        public Case Case { get; set; } = default!; // Navigation property to the associated case
 
         [Required]
-        public int AddedByUserId { get; set; }
+        public int AddedByUserId { get; set; } // Foreign key to the user who added the evidence
 
-        [ForeignKey(nameof(AddedByUserId))]
-        public User AddedByUser { get; set; } = default!;
+        [ForeignKey(nameof(AddedByUserId))] // Navigation property to the user who added the evidence
+        public User AddedByUser { get; set; } = default!; // Navigation property to the user who added the evidence
 
         [Required]
-        public EvidenceType Type { get; set; }
+        public EvidenceType Type { get; set; } // Type of the evidence (e.g., Text, File)
 
         // Fluent API CHECK)
         [MaxLength(8000)]
-        public string? TextContent { get; set; }
+        public string? TextContent { get; set; } // Text content of the evidence, if applicable
 
         [MaxLength(1024), Url]
         public string? FileUrl { get; set; }
