@@ -32,7 +32,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public DateTime ActedAt { get; set; } = DateTime.UtcNow; // Timestamp of when the action was performed
 
         [MaxLength(2000)]
-        public string? Details { get; set; }
+        public string? Details { get; set; } // Additional details about the action
     }
 
 }
