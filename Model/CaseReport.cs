@@ -17,12 +17,12 @@ namespace BERihalCodestackerChallenge2025.Model
         public Case Case { get; set; } = default!; // Navigation property to the associated case
 
         [Required]
-        public int ReportId { get; set; } 
+        public int ReportId { get; set; } // Foreign key to the associated crime report
 
         [ForeignKey(nameof(ReportId))] 
-        public CrimeReport Report { get; set; } = default!; 
+        public CrimeReport Report { get; set; } = default!; // Navigation property to the associated crime report
 
         [Required]
-        public DateTime LinkedAt { get; set; } = DateTime.UtcNow; 
+        public DateTime LinkedAt { get; set; } = DateTime.UtcNow; // Timestamp when the report was linked to the case
     }
 }
