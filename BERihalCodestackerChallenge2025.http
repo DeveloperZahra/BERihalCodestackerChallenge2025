@@ -1,4 +1,4 @@
-@BERihalCodestackerChallenge2025_HostAddress = http://localhost:5128
+@BERihalCodestackerChallenge2025_HostAddress = http://localhost:5263
 
 GET {{BERihalCodestackerChallenge2025_HostAddress}}/weatherforecast/
 Accept: application/json
