@@ -10,7 +10,7 @@ namespace BERihalCodestackerChallenge2025.Data
     // ---------------------------
     public class AppDbContext : DbContext // Represents the application's database context
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { } // Constructor accepting DbContext options
 
         public DbSet<User> Users => Set<User>();
         public DbSet<CrimeReport> CrimeReports => Set<CrimeReport>();
