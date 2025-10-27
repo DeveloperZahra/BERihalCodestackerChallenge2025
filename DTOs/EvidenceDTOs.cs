@@ -33,4 +33,5 @@
         public DateTime ActedAt { get; set; }
         public string? Details { get; set; }
     }
+
 }
