@@ -55,4 +55,14 @@
         public int NumberOfVictims { get; set; }
         public int NumberOfWitnesses { get; set; }
     }
+
+    // DTO for case assignees
+    public class CaseAssigneeDto
+    {
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+        public string AssignedRole { get; set; }
+        public string ProgressStatus { get; set; }
+        public DateTime AssignedAt { get; set; }
+    }
 }
