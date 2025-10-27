@@ -43,7 +43,7 @@ namespace BERihalCodestackerChallenge2025.Data
 
             b.Entity<CaseAssignee>()
                 .HasOne(a => a.Case).WithMany(c => c.Assignees)
-                .HasForeignKey(a => a.CaseId).OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(a => a.CaseId).OnDelete(DeleteBehavior.Cascade); // Cascade delete assignees when case is deleted
 
             b.Entity<CaseReport>()
                 .HasOne(cr => cr.Case).WithMany(c => c.LinkedReports)
