@@ -9,30 +9,30 @@ namespace BERihalCodestackerChallenge2025.Model
     public class CaseAssignee
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } // Primary key
 
         [Required]
-        public int CaseId { get; set; }
+        public int CaseId { get; set; } // Foreign key to the case
 
-        [ForeignKey(nameof(CaseId))]
-        public Case Case { get; set; } = default!;
+        [ForeignKey(nameof(CaseId))] // Navigation property to the case
+        public Case Case { get; set; } = default!; // Navigation property to the case
 
         [Required]
-        public int UserId { get; set; }
+        public int UserId { get; set; } // Foreign key to the user
 
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; } = default!;
+        public User User { get; set; } = default!; // Navigation property to the user
 
         //
         [Required, MaxLength(32)]
-        public string AssignedRole { get; set; } = "Officer"; // "Investigator" 
+        public string AssignedRole { get; set; } = "Officer"; // Role assigned to the user for this case 
 
         //
         [Required]
-        public CaseStatus ProgressStatus { get; set; } = CaseStatus.pending;
+        public CaseStatus ProgressStatus { get; set; } = CaseStatus.pending; // Progress status of the assignee in the case
 
         [Required]
-        public DateTime AssignedAt { get; set; } = DateTime.UtcNow;
+        public DateTime AssignedAt { get; set; } = DateTime.UtcNow; // Timestamp of when the user was assigned to the case
     }
 
 }
