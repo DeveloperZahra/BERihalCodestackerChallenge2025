@@ -59,7 +59,7 @@ namespace BERihalCodestackerChallenge2025.Data
 
             b.Entity<EvidenceAuditLog>()
                 .HasOne(a => a.Evidence).WithMany(e => e.Audit)
-                .HasForeignKey(a => a.EvidenceId).OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(a => a.EvidenceId).OnDelete(DeleteBehavior.Cascade); // Cascade delete audit logs when evidence is deleted
         }
     }
 }
