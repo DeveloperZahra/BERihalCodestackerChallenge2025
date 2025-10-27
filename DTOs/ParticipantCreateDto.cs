@@ -8,4 +8,14 @@
         public string? Notes { get; set; }
     }
 
+    // Dto for Case Participant Create
+    public class CaseParticipantCreateDto
+    {
+        public int? ParticipantId { get; set; } // existing participant (optional)
+        public string? FullName { get; set; }
+        public string? Phone { get; set; }
+        public string? Notes { get; set; }
+        public string Role { get; set; } // suspect | victim | witness
+    }
+
 }
