@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 
+
+
 namespace BERihalCodestackerChallenge2025.Model
 {
     [Index(nameof(Username), IsUnique = true)] // Ensure usernames are unique
