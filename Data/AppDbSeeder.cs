@@ -107,7 +107,7 @@ namespace BERihalCodestackerChallenge2025.Data
                 context.SaveChanges();
 
                 // ---------------------
-                
+                // Seed Case Assignees
                 // ---------------------
                 var investigator = context.Users.First(u => u.Role == Role.Investigator);
                 var officer = context.Users.First(u => u.Role == Role.Officer);
