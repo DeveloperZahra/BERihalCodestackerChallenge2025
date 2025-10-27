@@ -73,7 +73,7 @@ namespace BERihalCodestackerChallenge2025.Data
             }
 
             // ---------------------
-            // 
+            // Seed Cases
             // ---------------------
             if (!context.Cases.Any())
             {
