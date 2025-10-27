@@ -26,7 +26,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public int ActedByUserId { get; set; } // Foreign key to the user who performed the action
 
         [ForeignKey(nameof(ActedByUserId))]
-        public User ActedByUser { get; set; } = default!;
+        public User ActedByUser { get; set; } = default!; // Navigation property to the user who performed the action
 
         [Required]
         public DateTime ActedAt { get; set; } = DateTime.UtcNow;
