@@ -134,7 +134,7 @@ namespace BERihalCodestackerChallenge2025.Data
                 context.SaveChanges();
 
                 // ---------------------
-                
+                // Seed Case Participants
                 // ---------------------
                 var suspect = new Participant
                 {
