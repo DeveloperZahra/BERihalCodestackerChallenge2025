@@ -18,4 +18,15 @@
         public string Role { get; set; } // suspect | victim | witness
     }
 
+    // Dto for Case Participant Read
+    public class CaseParticipantReadDto
+    {
+        public int ParticipantId { get; set; }
+        public string FullName { get; set; }
+        public string Phone { get; set; }
+        public string Role { get; set; }
+        public string? AddedBy { get; set; }
+        public DateTime AddedAt { get; set; }
+    }
+
 }
