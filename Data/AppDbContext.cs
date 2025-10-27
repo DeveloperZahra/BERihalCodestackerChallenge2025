@@ -22,7 +22,7 @@ namespace BERihalCodestackerChallenge2025.Data
         public DbSet<Evidence> Evidences => Set<Evidence>(); // DbSet for evidences
         public DbSet<EvidenceAuditLog> EvidenceAuditLogs => Set<EvidenceAuditLog>(); // DbSet for evidence audit logs
 
-        protected override void OnModelCreating(ModelBuilder b)
+        protected override void OnModelCreating(ModelBuilder b) // Configure entity relationships and constraints
         {
             base.OnModelCreating(b);
 
