@@ -15,7 +15,7 @@ namespace BERihalCodestackerChallenge2025.Data
         public DbSet<User> Users => Set<User>(); // DbSet for users
         public DbSet<CrimeReport> CrimeReports => Set<CrimeReport>(); // DbSet for crime reports
         public DbSet<Case> Cases => Set<Case>(); // DbSet for cases
-        public DbSet<CaseReport> CaseReports => Set<CaseReport>();
+        public DbSet<CaseReport> CaseReports => Set<CaseReport>(); // DbSet for case-report links
         public DbSet<CaseAssignee> CaseAssignees => Set<CaseAssignee>();
         public DbSet<Participant> Participants => Set<Participant>();
         public DbSet<CaseParticipant> CaseParticipants => Set<CaseParticipant>();
