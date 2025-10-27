@@ -25,5 +25,12 @@
         public DateTime CreatedAt { get; set; }
         public string AddedBy { get; set; }
     }
-
+    // Dto for Evidence Audit to  Represents an audit record of an action taken
+    public class EvidenceAuditLogDto
+    {
+        public string Action { get; set; }
+        public string ActedBy { get; set; }
+        public DateTime ActedAt { get; set; }
+        public string? Details { get; set; }
+    }
 }
