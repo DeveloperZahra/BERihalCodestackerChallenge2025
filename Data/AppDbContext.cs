@@ -24,22 +24,22 @@ namespace BERihalCodestackerChallenge2025.Data
 
         protected override void OnModelCreating(ModelBuilder b) // Configure entity relationships and constraints
         {
-            base.OnModelCreating(b);
+            base.OnModelCreating(b); // Call base method
 
             // CHECK: Evidence: enforce text vs image payload
             b.Entity<Evidence>().ToTable(tb =>
                 tb.HasCheckConstraint("CK_Evidence_Content",
                     "( [Type] = 0 AND [TextContent] IS NOT NULL AND [FileUrl] IS NULL ) OR " +
-                    "( [Type] = 1 AND [FileUrl] IS NOT NULL AND [TextContent] IS NULL )"));
-
-            
+                    "( [Type] = 1 AND [FileUrl] IS NOT NULL AND [TextContent] IS NULL )")); // Text vs File constraint
 
 
-            b.Entity<Case>()
+
+
+            b.Entity<Case>() 
                 .HasOne(c => c.CreatedByUser)
                 .WithMany(u => u.CreatedCases)
                 .HasForeignKey(c => c.CreatedByUserId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of users who created cases
 
             b.Entity<CaseAssignee>()
                 .HasOne(a => a.Case).WithMany(c => c.Assignees)
