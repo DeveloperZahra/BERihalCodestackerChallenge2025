@@ -13,7 +13,7 @@ namespace BERihalCodestackerChallenge2025.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { } // Constructor accepting DbContext options
 
         public DbSet<User> Users => Set<User>(); // DbSet for users
-        public DbSet<CrimeReport> CrimeReports => Set<CrimeReport>();
+        public DbSet<CrimeReport> CrimeReports => Set<CrimeReport>(); // DbSet for crime reports
         public DbSet<Case> Cases => Set<Case>();
         public DbSet<CaseReport> CaseReports => Set<CaseReport>();
         public DbSet<CaseAssignee> CaseAssignees => Set<CaseAssignee>();
