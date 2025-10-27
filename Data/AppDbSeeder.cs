@@ -20,7 +20,7 @@ namespace BERihalCodestackerChallenge2025.Data
                 var admin = new User
                 {
                     Username = "admin",
-                    Email = "admin@crimecase.local",
+                    Email = "admin@crimecase.local", 
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"), //
                     Role = Role.Admin,
                     ClearanceLevel = Clearance.critical,
@@ -52,7 +52,7 @@ namespace BERihalCodestackerChallenge2025.Data
             }
 
             // ---------------------
-            // 
+            // Seed Crime Reports
             // ---------------------
             if (!context.CrimeReports.Any())
             {
