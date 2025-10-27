@@ -22,6 +22,9 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required] //  PBKDF2/BCrypt
         public string PasswordHash { get; set; } = default!;// Hashed password for security
 
+        [Required, StringLength(150)]
+        public string FullName { get; set; } 
+
         [Required]
         public Role Role { get; set; } // User's role in the system
 
