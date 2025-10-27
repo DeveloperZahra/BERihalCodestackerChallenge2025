@@ -8,13 +8,13 @@ namespace BERihalCodestackerChallenge2025.Model
     public class CaseReport 
     {
         [Key] 
-        public int Id { get; set; } 
+        public int Id { get; set; } // Primary key
 
         [Required]
-        public int CaseId { get; set; } 
+        public int CaseId { get; set; } // Foreign key to the associated case
 
         [ForeignKey(nameof(CaseId))] 
-        public Case Case { get; set; } = default!; 
+        public Case Case { get; set; } = default!; // Navigation property to the associated case
 
         [Required]
         public int ReportId { get; set; } 
