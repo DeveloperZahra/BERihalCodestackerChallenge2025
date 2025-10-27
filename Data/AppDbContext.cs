@@ -1,0 +1,67 @@
+﻿using BERihalCodestackerChallenge2025.Model;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+
+namespace BERihalCodestackerChallenge2025.Data
+{
+    // DbContext 
+    // ---------------------------
+    public class AppDbContext : DbContext // Represents the application's database context
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { } // Constructor accepting DbContext options
+
+        public DbSet<User> Users => Set<User>(); // DbSet for users
+        public DbSet<CrimeReport> CrimeReports => Set<CrimeReport>(); // DbSet for crime reports
+        public DbSet<Case> Cases => Set<Case>(); // DbSet for cases
+        public DbSet<CaseReport> CaseReports => Set<CaseReport>(); // DbSet for case-report links
+        public DbSet<CaseAssignee> CaseAssignees => Set<CaseAssignee>(); // DbSet for case assignees
+        public DbSet<Participant> Participants => Set<Participant>(); // DbSet for participants
+        public DbSet<CaseParticipant> CaseParticipants => Set<CaseParticipant>(); // DbSet for case-participant links
+        public DbSet<Evidence> Evidences => Set<Evidence>(); // DbSet for evidences
+        public DbSet<EvidenceAuditLog> EvidenceAuditLogs => Set<EvidenceAuditLog>(); // DbSet for evidence audit logs
+
+        protected override void OnModelCreating(ModelBuilder b) // Configure entity relationships and constraints
+        {
+            base.OnModelCreating(b); // Call base method
+
+            // CHECK: Evidence: enforce text vs image payload
+            b.Entity<Evidence>().ToTable(tb =>
+                tb.HasCheckConstraint("CK_Evidence_Content",
+                    "( [Type] = 0 AND [TextContent] IS NOT NULL AND [FileUrl] IS NULL ) OR " +
+                    "( [Type] = 1 AND [FileUrl] IS NOT NULL AND [TextContent] IS NULL )")); // Text vs File constraint
+
+
+
+
+            b.Entity<Case>() 
+                .HasOne(c => c.CreatedByUser)
+                .WithMany(u => u.CreatedCases)
+                .HasForeignKey(c => c.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of users who created cases
+
+            b.Entity<CaseAssignee>()
+                .HasOne(a => a.Case).WithMany(c => c.Assignees)
+                .HasForeignKey(a => a.CaseId).OnDelete(DeleteBehavior.Cascade); // Cascade delete assignees when case is deleted
+
+            b.Entity<CaseReport>()
+                .HasOne(cr => cr.Case).WithMany(c => c.LinkedReports)
+                .HasForeignKey(cr => cr.CaseId).OnDelete(DeleteBehavior.Cascade); // Cascade delete case-report links when case is deleted
+
+            b.Entity<CaseParticipant>()
+                .HasOne(cp => cp.Case).WithMany(c => c.Participants)
+                .HasForeignKey(cp => cp.CaseId).OnDelete(DeleteBehavior.Cascade); // Cascade delete case-participant links when case is deleted
+
+            b.Entity<Evidence>()
+                .HasOne(e => e.Case).WithMany(c => c.Evidences)
+                .HasForeignKey(e => e.CaseId).OnDelete(DeleteBehavior.Cascade); // Cascade delete evidences when case is deleted
+
+            b.Entity<EvidenceAuditLog>()
+                .HasOne(a => a.Evidence).WithMany(e => e.Audit)
+                .HasForeignKey(a => a.EvidenceId).OnDelete(DeleteBehavior.Cascade); // Cascade delete audit logs when evidence is deleted
+        }
+    }
+}
+
+
