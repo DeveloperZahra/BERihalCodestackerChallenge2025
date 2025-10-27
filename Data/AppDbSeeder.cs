@@ -2,12 +2,13 @@
 using System.Linq;
 using BERihalCodestackerChallenge2025.Model;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
 namespace BERihalCodestackerChallenge2025.Data
 {
     public static class AppDbSeeder 
     {
-        public static void SeedDatabase(AppDbContext context) 
+        public static void SeedDatabase(AppDbContext context) // Seed initial data into the database
         {
 
 
@@ -15,122 +16,122 @@ namespace BERihalCodestackerChallenge2025.Data
             // ---------------------
             // Seed Users
             // ---------------------
-            if (!context.Users.Any())
+            if (!context.Users.Any()) // Seed initial users
             {
-                var admin = new User
+                var admin = new User // Admin user
                 {
-                    Username = "admin",
-                    Email = "admin@crimecase.local", 
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"), //
-                    Role = Role.Admin,
-                    ClearanceLevel = Clearance.critical,
-                    CreatedAt = DateTime.UtcNow
+                    Username = "admin", // Admin username
+                    Email = "admin@crimecase.local", // Admin email
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"), // Hashed password
+                    Role = Role.Admin, // Admin role
+                    ClearanceLevel = Clearance.critical, // Highest clearance
+                    CreatedAt = DateTime.UtcNow // Timestamp
                 };
 
-                var investigator = new User
+                var investigator = new User // Investigator user
                 {
-                    Username = "investigator1",
-                    Email = "investigator@crimecase.local",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Inv@123"),
-                    Role = Role.Investigator,
-                    ClearanceLevel = Clearance.high,
-                    CreatedAt = DateTime.UtcNow
+                    Username = "investigator1", // Investigator username
+                    Email = "investigator@crimecase.local", // Investigator email
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Inv@123"), // Hashed password
+                    Role = Role.Investigator, // Investigator role
+                    ClearanceLevel = Clearance.high, // High clearance
+                    CreatedAt = DateTime.UtcNow // Timestamp
                 };
 
-                var officer = new User
+                var officer = new User // Officer user
                 {
-                    Username = "officer1",
-                    Email = "officer@crimecase.local",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Off@123"),
-                    Role = Role.Officer,
-                    ClearanceLevel = Clearance.medium,
-                    CreatedAt = DateTime.UtcNow
+                    Username = "officer1", // Officer username
+                    Email = "officer@crimecase.local", // Officer email
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Off@123"), // Hashed password
+                    Role = Role.Officer, // Officer role
+                    ClearanceLevel = Clearance.medium, // Medium clearance
+                    CreatedAt = DateTime.UtcNow // Timestamp
                 };
 
-                context.Users.AddRange(admin, investigator, officer);
-                context.SaveChanges();
+                context.Users.AddRange(admin, investigator, officer); // Add users to context
+                context.SaveChanges(); // Save changes to database
             }
 
             // ---------------------
             // Seed Crime Reports
             // ---------------------
-            if (!context.CrimeReports.Any())
+            if (!context.CrimeReports.Any()) // Seed initial crime reports 
             {
-                var report = new CrimeReport
+                var report = new CrimeReport // Crime report
                 {
-                    Title = "Robbery at City Center",
-                    Description = "A suspected robbery was reported near downtown at 10 PM.",
-                    AreaCity = "Muscat",
-                    ReportDateTime = DateTime.UtcNow.AddDays(-1),
-                    Status = ReportStatus.pending,
-                    Latitude = 23.5880M,
-                    Longitude = 58.3829M,
-                    TrackingCode = "CR-2025-0001"
+                    Title = "Robbery at City Center", // Report title
+                    Description = "A suspected robbery was reported near downtown at 10 PM.", // Report description
+                    AreaCity = "Muscat", // Area/City
+                    ReportDateTime = DateTime.UtcNow.AddDays(-1), // Reported date/time
+                    Status = ReportStatus.pending, // Report status
+                    Latitude = 23.5880M, // Report latitude
+                    Longitude = 58.3829M, // Report longitude
+                    TrackingCode = "CR-2025-0001" // Unique tracking code
                 };
 
-                context.CrimeReports.Add(report);
-                context.SaveChanges();
+                context.CrimeReports.Add(report);  // Add report to context
+                context.SaveChanges(); 
             }
 
             // ---------------------
             // Seed Cases
             // ---------------------
-            if (!context.Cases.Any())
+            if (!context.Cases.Any()) // Seed initial cases
             {
-                var adminUser = context.Users.First(u => u.Role == Role.Admin);
-                var report = context.CrimeReports.First();
+                var adminUser = context.Users.First(u => u.Role == Role.Admin); // Get admin user
+                var report = context.CrimeReports.First(); // Get the crime report
 
-                var case1 = new Case
+                var case1 = new Case // Case
                 {
-                    CaseNumber = "CASE-2025-001",
+                    CaseNumber = "CASE-2025-001", // Unique case number
                     Name = "City Center Robbery",
-                    Description = "Investigation into a robbery case reported by citizen near Muscat City Center.",
-                    AreaCity = "Muscat",
-                    CaseType = "Robbery",
-                    AuthorizationLevel = Clearance.high,
-                    Status = CaseStatus.ongoing,
-                    CreatedByUserId = adminUser.Id,
-                    CreatedAt = DateTime.UtcNow
+                    Description = "Investigation into a robbery case reported by citizen near Muscat City Center.", // Case description
+                    AreaCity = "Muscat", // Area/City
+                    CaseType = "Robbery", // Case type
+                    AuthorizationLevel = Clearance.high, // Required clearance level
+                    Status = CaseStatus.ongoing, // Case status
+                    CreatedByUserId = adminUser.Id, // Creator user ID
+                    CreatedAt = DateTime.UtcNow // Timestamp
                 };
 
-                context.Cases.Add(case1);
-                context.SaveChanges();
+                context.Cases.Add(case1); // Add case to context
+                context.SaveChanges(); // Save changes to database
 
                 // 
-                var link = new CaseReport
+                var link = new CaseReport // Link case to report
                 {
-                    CaseId = case1.Id,
-                    ReportId = report.Id,
-                    LinkedAt = DateTime.UtcNow
+                    CaseId = case1.Id, // Case ID
+                    ReportId = report.Id, // Report ID
+                    LinkedAt = DateTime.UtcNow // Timestamp
                 };
-                context.CaseReports.Add(link);
+                context.CaseReports.Add(link); // Add link to context
                 context.SaveChanges();
 
                 // ---------------------
                 // Seed Case Assignees
                 // ---------------------
-                var investigator = context.Users.First(u => u.Role == Role.Investigator);
-                var officer = context.Users.First(u => u.Role == Role.Officer);
+                var investigator = context.Users.First(u => u.Role == Role.Investigator); // Get investigator user
+                var officer = context.Users.First(u => u.Role == Role.Officer); // Get officer user
 
-                var assign1 = new CaseAssignee
+                var assign1 = new CaseAssignee // Case assignee
                 {
-                    CaseId = case1.Id,
-                    UserId = investigator.Id,
-                    AssignedRole = "Investigator",
-                    ProgressStatus = CaseStatus.ongoing,
-                    AssignedAt = DateTime.UtcNow
+                    CaseId = case1.Id, // Case ID
+                    UserId = investigator.Id, // User ID
+                    AssignedRole = "Investigator", // Assigned role
+                    ProgressStatus = CaseStatus.ongoing, // Progress status
+                    AssignedAt = DateTime.UtcNow // Timestamp
                 };
 
-                var assign2 = new CaseAssignee
+                var assign2 = new CaseAssignee // Case assignee
                 {
-                    CaseId = case1.Id,
-                    UserId = officer.Id,
-                    AssignedRole = "Officer",
-                    ProgressStatus = CaseStatus.pending,
-                    AssignedAt = DateTime.UtcNow
+                    CaseId = case1.Id, //   Case ID
+                    UserId = officer.Id, // User ID
+                    AssignedRole = "Officer", // Assigned role
+                    ProgressStatus = CaseStatus.pending, // Progress status
+                    AssignedAt = DateTime.UtcNow // Timestamp
                 };
 
-                context.CaseAssignees.AddRange(assign1, assign2);
+                context.CaseAssignees.AddRange(assign1, assign2); // Add assignees to context
                 context.SaveChanges();
 
                 // ---------------------
@@ -138,37 +139,37 @@ namespace BERihalCodestackerChallenge2025.Data
                 // ---------------------
                 var suspect = new Participant
                 {
-                    FullName = "John Doe",
-                    Phone = "987654321",
-                    Notes = "Main suspect seen near the crime scene."
+                    FullName = "John Doe", // Suspect name
+                    Phone = "987654321", // Suspect phone
+                    Notes = "Main suspect seen near the crime scene." // Notes
                 };
 
-                var victim = new Participant
+                var victim = new Participant // Victim participant
                 {
-                    FullName = "Jane Smith",
-                    Phone = "912345678",
-                    Notes = "Victim reported missing wallet and phone."
+                    FullName = "Jane Smith", // Victim name
+                    Phone = "912345678", // Victim phone
+                    Notes = "Victim reported missing wallet and phone." // Notes
                 };
 
-                context.Participants.AddRange(suspect, victim);
+                context.Participants.AddRange(suspect, victim); // Add participants to context
                 context.SaveChanges();
 
-                var caseSuspect = new CaseParticipant
+                var caseSuspect = new CaseParticipant // Case participant - suspect
                 {
-                    CaseId = case1.Id,
-                    ParticipantId = suspect.Id,
+                    CaseId = case1.Id, // Link to case
+                    ParticipantId = suspect.Id, // Link to suspect participant
                     Role = ParticipantRole.suspect,
-                    AddedByUserId = investigator.Id,
-                    AddedAt = DateTime.UtcNow
+                    AddedByUserId = investigator.Id, // Added by investigator
+                    AddedAt = DateTime.UtcNow // Timestamp
                 };
 
-                var caseVictim = new CaseParticipant
+                var caseVictim = new CaseParticipant // Case participant - victim
                 {
                     CaseId = case1.Id,
-                    ParticipantId = victim.Id,
-                    Role = ParticipantRole.victim,
-                    AddedByUserId = officer.Id,
-                    AddedAt = DateTime.UtcNow
+                    ParticipantId = victim.Id, //   Link to victim participant
+                    Role = ParticipantRole.victim, // Victim role
+                    AddedByUserId = officer.Id, // Added by officer
+                    AddedAt = DateTime.UtcNow // Timestamp
                 };
 
                 context.CaseParticipants.AddRange(caseSuspect, caseVictim);
@@ -179,30 +180,30 @@ namespace BERihalCodestackerChallenge2025.Data
                 // ---------------------
                 var evidence = new Evidence
                 {
-                    CaseId = case1.Id,
+                    CaseId = case1.Id, // Link to case
                     AddedByUserId = investigator.Id,
-                    Type = EvidenceType.text,
-                    TextContent = "Fingerprint found on victim's car.",
-                    IsSoftDeleted = false,
-                    CreatedAt = DateTime.UtcNow,
+                    Type = EvidenceType.text, // Evidence type
+                    TextContent = "Fingerprint found on victim's car.", // Text evidence
+                    IsSoftDeleted = false, // Not deleted
+                    CreatedAt = DateTime.UtcNow,// Timestamp
                     UpdatedAt = DateTime.UtcNow
                 };
-                context.Evidences.Add(evidence);
+                context.Evidences.Add(evidence); // Add evidence to context
                 context.SaveChanges();
 
                 // ---------------------
                 // Seed Evidence Audit Log
                 // ---------------------
-                var audit = new EvidenceAuditLog
+                var audit = new EvidenceAuditLog // Evidence audit log
                 {
                     EvidenceId = evidence.Id,
                     Action = "add",
                     ActedByUserId = investigator.Id,
                     ActedAt = DateTime.UtcNow,
-                    Details = "Initial evidence entry by Investigator."
+                    Details = "Initial evidence entry by Investigator." // Details
                 };
 
-                context.EvidenceAuditLogs.Add(audit);
+                context.EvidenceAuditLogs.Add(audit); // Add audit log to context
                 context.SaveChanges();
             }
         }
