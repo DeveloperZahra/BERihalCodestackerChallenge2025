@@ -23,7 +23,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public string Action { get; set; } = "add"; // Action performed on the evidence
 
         [Required]
-        public int ActedByUserId { get; set; }
+        public int ActedByUserId { get; set; } // Foreign key to the user who performed the action
 
         [ForeignKey(nameof(ActedByUserId))]
         public User ActedByUser { get; set; } = default!;
