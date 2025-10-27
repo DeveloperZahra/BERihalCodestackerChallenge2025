@@ -2,13 +2,14 @@
 using System.Runtime;
 using System.Security.Policy;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using AutoMapper;
 
 namespace BERihalCodestackerChallenge2025.Mapping
 {
     //AutoMapper Profile for mapping Models <-> DTOs
-    public class MappingProfile : Profile
+    public class AutoMapperProfile : Profile 
     {
-        public MappingProfile()
+        public AutoMapperProfile()
         {
             // ========== USERS ==========
             CreateMap<User, UserReadDto>();
@@ -23,23 +24,31 @@ namespace BERihalCodestackerChallenge2025.Mapping
             CreateMap<CrimeReportCreateDto, CrimeReport>();
 
             // ========== CASES ==========
+            // Create / Update mapping
+            CreateMap<CaseCreateDto, Case>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore()) // ID handled by DB
+                .ForMember(dest => dest.CaseNumber, opt => opt.Ignore()) // auto-generated
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "pending")) // default
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+
+            CreateMap<CaseUpdateDto, Case>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            // Ignore nulls (only update sent fields)
+
+            // List Item mapping (summary for list API)
             CreateMap<Case, CaseListItemDto>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedByUser.FullName))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                     src.Description.Length > 100
-                    ? src.Description.Substring(0, src.Description.Substring(0, 100).LastIndexOf(' ')) + " ..."
-                    : src.Description));
+                        ? src.Description.Substring(0, src.Description.Substring(0, 100).LastIndexOf(' ')) + " ..."
+                        : src.Description));
 
-            CreateMap<Case, CaseDetailsDto>()
-                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedByUser.FullName))
-                .ForMember(dest => dest.CaseLevel, opt => opt.MapFrom(src => src.AuthorizationLevel));
-
-            CreateMap<CaseCreateDto, Case>();
-            CreateMap<CaseUpdateDto, Case>();
-
-            // ========== ASSIGNEES ==========
+            //  Case Assignee mapping
             CreateMap<CaseAssignee, CaseAssigneeDto>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName));
+
+
+
 
             // ========== PARTICIPANTS ==========
             CreateMap<Participant, ParticipantCreateDto>().ReverseMap();
@@ -65,4 +74,5 @@ namespace BERihalCodestackerChallenge2025.Mapping
                 .ForMember(dest => dest.Token, opt => opt.Ignore());
         }
     }
-    }
+}
+    
