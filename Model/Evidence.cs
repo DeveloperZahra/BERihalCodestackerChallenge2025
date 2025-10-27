@@ -31,26 +31,26 @@ namespace BERihalCodestackerChallenge2025.Model
         [MaxLength(8000)]
         public string? TextContent { get; set; } // Text content of the evidence, if applicable
 
-        [MaxLength(1024), Url]
-        public string? FileUrl { get; set; }
+        [MaxLength(1024), Url] // URL to the file, if applicable
+        public string? FileUrl { get; set; } // URL to the file, if applicable
 
-        [MaxLength(128)]
-        public string? MimeType { get; set; }
+        [MaxLength(128)] // File name, if applicable
+        public string? MimeType { get; set; } // MIME type of the file, if applicable
 
-        public long? SizeBytes { get; set; }
+        public long? SizeBytes { get; set; } // Size of the file in bytes, if applicable
 
         [Required]
-        public bool IsSoftDeleted { get; set; } = false;
+        public bool IsSoftDeleted { get; set; } = false; // Soft deletion flag
 
         [MaxLength(1024)]
-        public string? Remarks { get; set; }
+        public string? Remarks { get; set; } // Additional remarks about the evidence
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp of when the evidence was added
 
         [Required]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow; // Timestamp of the last update to the evidence
 
-        public ICollection<EvidenceAuditLog>? Audit { get; set; }
+        public ICollection<EvidenceAuditLog>? Audit { get; set; } // Audit logs related to this evidence
     }
 }
