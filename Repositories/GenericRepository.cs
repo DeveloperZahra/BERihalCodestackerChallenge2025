@@ -23,9 +23,9 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate) // Find entities matching a given predicate
             => await _dbSet.Where(predicate).ToListAsync(); // Use LINQ to filter entities
 
-        public async Task AddAsync(T entity)
+        public async Task AddAsync(T entity) // Add a new entity to the DbSet
         {
-            await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity); // Asynchronously add the entity
         }
 
         public void Update(T entity)
