@@ -18,7 +18,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.ToListAsync(); // Retrieve all entities of type T
 
-        public async Task<T?> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
+        public async Task<T?> GetByIdAsync(int id) => await _dbSet.FindAsync(id); // Retrieve an entity by its primary key
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
             => await _dbSet.Where(predicate).ToListAsync();
