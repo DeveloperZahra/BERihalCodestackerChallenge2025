@@ -6,8 +6,8 @@ namespace BERihalCodestackerChallenge2025.Repositories
 {
     public class ReportRepository : GenericRepository<CrimeReport>, IReportRepository // Repository for crime reports
     {
-        private readonly AppDbContext _context;
-        public ReportRepository(AppDbContext context) : base(context) => _context = context;
+        private readonly AppDbContext _context; // Database context
+        public ReportRepository(AppDbContext context) : base(context) => _context = context; // Constructor accepting the database context
 
         public async Task<CrimeReport?> GetByTrackingCodeAsync(string trackingCode)
         {
