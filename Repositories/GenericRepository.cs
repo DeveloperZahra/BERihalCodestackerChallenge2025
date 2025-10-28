@@ -12,11 +12,11 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public GenericRepository(AppDbContext context) // Constructor accepting the database context
         {
-            _context = context;
-            _dbSet = _context.Set<T>();
+            _context = context; // Initialize the database context
+            _dbSet = _context.Set<T>(); // Initialize the DbSet for the entity type
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.ToListAsync();
+        public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.ToListAsync(); // Retrieve all entities of type T
 
         public async Task<T?> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
 
