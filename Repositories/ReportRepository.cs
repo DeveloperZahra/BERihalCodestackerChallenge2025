@@ -13,7 +13,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         {
             return await _context.CrimeReports 
                 .Include(r => r.ReportedByUser) // Include the user who reported the crime
-                .FirstOrDefaultAsync(r => r.TrackingCode == trackingCode);
+                .FirstOrDefaultAsync(r => r.TrackingCode == trackingCode); // Find the report by tracking code
         }
     }
 }
