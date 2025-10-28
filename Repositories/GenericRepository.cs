@@ -28,9 +28,9 @@ namespace BERihalCodestackerChallenge2025.Repositories
             await _dbSet.AddAsync(entity); // Asynchronously add the entity
         }
 
-        public void Update(T entity)
+        public void Update(T entity) // Update an existing entity in the DbSet
         {
-            _dbSet.Update(entity);
+            _dbSet.Update(entity); // Update the entity
         }
 
         public void Delete(T entity)
