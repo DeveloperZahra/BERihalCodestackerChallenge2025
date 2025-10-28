@@ -3,6 +3,7 @@
     // Dto for Evidence create 
     public class EvidenceCreateDto
     {
+        public int CaseId { get; set; }
         public string Type { get; set; } // text | image
         public string? TextContent { get; set; }
         public string? FileUrl { get; set; }
