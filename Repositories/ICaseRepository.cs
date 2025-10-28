@@ -4,7 +4,7 @@ namespace BERihalCodestackerChallenge2025.Repositories // Case repository interf
 {
     public interface ICaseRepository // Case repository interface for case-specific operations
     {
-        Task<Case?> GetDetailsAsync(int id);
-        Task<IEnumerable<Case>> SearchAsync(string? query);
+        Task<Case?> GetDetailsAsync(int id); // Retrieve detailed information about a Case by its ID
+        Task<IEnumerable<Case>> SearchAsync(string? query); // Search for cases based on a query string
     }
 }
