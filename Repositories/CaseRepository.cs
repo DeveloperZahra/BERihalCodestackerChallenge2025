@@ -23,10 +23,10 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public async Task<IEnumerable<Case>> SearchAsync(string? query) // Search for cases based on a query string
         {
-            var q = _context.Cases.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(query))
-                q = q.Where(c => c.Name.Contains(query) || c.Description.Contains(query));
-            return await q.Include(c => c.CreatedByUser).ToListAsync();
+            var q = _context.Cases.AsQueryable(); // Start with all cases
+            if (!string.IsNullOrWhiteSpace(query)) // If a query is provided
+                q = q.Where(c => c.Name.Contains(query) || c.Description.Contains(query)); // Filter cases by name or description containing the query
+            return await q.Include(c => c.CreatedByUser).ToListAsync(); // Include the user who created the case and return the list
         }
     }
 }
