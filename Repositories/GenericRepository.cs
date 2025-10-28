@@ -20,7 +20,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public async Task<T?> GetByIdAsync(int id) => await _dbSet.FindAsync(id); // Retrieve an entity by its primary key
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate) // Find entities matching a given predicate
             => await _dbSet.Where(predicate).ToListAsync();
 
         public async Task AddAsync(T entity)
