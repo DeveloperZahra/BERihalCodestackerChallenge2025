@@ -35,9 +35,9 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public void Delete(T entity) // Delete an entity from the DbSet
         {
-            _dbSet.Remove(entity);
+            _dbSet.Remove(entity); // Remove the entity
         }
 
-        public async Task SaveAsync() => await _context.SaveChangesAsync();
+        public async Task SaveAsync() => await _context.SaveChangesAsync(); // Save changes to the database asynchronously
     }
 }
