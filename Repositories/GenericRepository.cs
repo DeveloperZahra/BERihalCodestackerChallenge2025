@@ -10,7 +10,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         private readonly AppDbContext _context; // Database context
         private readonly DbSet<T> _dbSet; // DbSet for the entity type
 
-        public GenericRepository(AppDbContext context)
+        public GenericRepository(AppDbContext context) // Constructor accepting the database context
         {
             _context = context;
             _dbSet = _context.Set<T>();
