@@ -11,8 +11,8 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public async Task<CrimeReport?> GetByTrackingCodeAsync(string trackingCode) // Retrieve a crime report by its tracking code
         {
-            return await _context.CrimeReports
-                .Include(r => r.ReportedByUser)
+            return await _context.CrimeReports 
+                .Include(r => r.ReportedByUser) // Include the user who reported the crime
                 .FirstOrDefaultAsync(r => r.TrackingCode == trackingCode);
         }
     }
