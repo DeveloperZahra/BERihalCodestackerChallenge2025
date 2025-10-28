@@ -9,7 +9,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         private readonly AppDbContext _context; // Database context
         public ReportRepository(AppDbContext context) : base(context) => _context = context; // Constructor accepting the database context
 
-        public async Task<CrimeReport?> GetByTrackingCodeAsync(string trackingCode)
+        public async Task<CrimeReport?> GetByTrackingCodeAsync(string trackingCode) // Retrieve a crime report by its tracking code
         {
             return await _context.CrimeReports
                 .Include(r => r.ReportedByUser)
