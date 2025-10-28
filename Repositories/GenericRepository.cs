@@ -33,7 +33,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
             _dbSet.Update(entity); // Update the entity
         }
 
-        public void Delete(T entity)
+        public void Delete(T entity) // Delete an entity from the DbSet
         {
             _dbSet.Remove(entity);
         }
