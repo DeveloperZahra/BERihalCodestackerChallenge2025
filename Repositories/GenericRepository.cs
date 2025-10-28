@@ -7,7 +7,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : class // Generic repository implementation for CRUD operations
 
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context; // Database context
         private readonly DbSet<T> _dbSet;
 
         public GenericRepository(AppDbContext context)
