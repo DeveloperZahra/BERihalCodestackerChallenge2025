@@ -45,9 +45,13 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp of case creation
 
+        [Required]
+        public DateTime? UpdatedAt { get; set; } 
+
         public ICollection<CaseAssignee>? Assignees { get; set; } // Users assigned to the case
         public ICollection<Evidence>? Evidences { get; set; } // Evidences linked to the case
         public ICollection<CaseParticipant>? Participants { get; set; } //  Participants involved in the case
         public ICollection<CaseReport>? LinkedReports { get; set; } // Reports linked to the case
+        public ICollection<CaseParticipant> CaseParticipants { get; set; }
     }
 }

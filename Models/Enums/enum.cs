@@ -11,7 +11,7 @@ namespace BERihalCodestackerChallenge2025.Model
     public enum Clearance { low, medium, high, critical } // Clearance levels for accessing cases
     public enum CaseStatus { pending, ongoing, closed } // Status of a case
     public enum ReportStatus { pending, en_route, on_scene, under_investigation, resolved } // Status of a crime report
-    public enum ParticipantRole { suspect, victim, witness } // Roles of participants in a case
+    public enum ParticipantRole { Suspect, Victim, Witness } // Roles of participants in a case
     public enum EvidenceType { text, image } // Types of evidence
 
 

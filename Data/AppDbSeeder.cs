@@ -158,7 +158,7 @@ namespace BERihalCodestackerChallenge2025.Data
                 {
                     CaseId = case1.Id, // Link to case
                     ParticipantId = suspect.Id, // Link to suspect participant
-                    Role = ParticipantRole.suspect,
+                    Role = ParticipantRole.Suspect,
                     AddedByUserId = investigator.Id, // Added by investigator
                     AddedAt = DateTime.UtcNow // Timestamp
                 };
@@ -167,7 +167,7 @@ namespace BERihalCodestackerChallenge2025.Data
                 {
                     CaseId = case1.Id,
                     ParticipantId = victim.Id, //   Link to victim participant
-                    Role = ParticipantRole.victim, // Victim role
+                    Role = ParticipantRole.Victim, // Victim role
                     AddedByUserId = officer.Id, // Added by officer
                     AddedAt = DateTime.UtcNow // Timestamp
                 };
