@@ -43,7 +43,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public async Task<int> SaveChangesAsync(CancellationToken ct = default) // Persist changes to the database
             => await _db.SaveChangesAsync(ct); // Save all changes made in the context to the database
 
-        public async Task<IDisposable> BeginTransactionAsync(CancellationToken ct = default)
+        public async Task<IDisposable> BeginTransactionAsync(CancellationToken ct = default) // Begin a new database transaction
         {
             _txn = await _db.Database.BeginTransactionAsync(ct);
             return _txn;
