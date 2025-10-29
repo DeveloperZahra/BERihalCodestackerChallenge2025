@@ -14,7 +14,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public IReportRepository Reports { get; } // Report repository for managing report data
         public ICaseAssigneeRepository CaseAssignees { get; } // Case assignee repository for managing case assignments
         public IParticipantRepository Participants { get; } // Participant repository for managing participant data
-        public ICaseParticipantRepository CaseParticipants { get; }
+        public ICaseParticipantRepository CaseParticipants { get; } // Case participant repository for managing case-participant relationships
         public IEvidenceRepository Evidence { get; }
         public IEvidenceAuditLogRepository EvidenceAudit { get; }
 
