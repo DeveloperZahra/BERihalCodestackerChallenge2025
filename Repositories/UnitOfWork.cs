@@ -51,7 +51,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public async Task CommitTransactionAsync(CancellationToken ct = default) // Commit the current database transaction
         {
-            if (_txn != null) await _txn.CommitAsync(ct);
+            if (_txn != null) await _txn.CommitAsync(ct); // Commit the transaction if it exists
         }
 
         public async Task RollbackTransactionAsync(CancellationToken ct = default)
