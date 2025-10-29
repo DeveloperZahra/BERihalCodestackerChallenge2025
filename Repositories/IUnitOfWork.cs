@@ -2,7 +2,7 @@
 
 namespace BERihalCodestackerChallenge2025.Repositories
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork // Unit of Work interface encapsulating all repositories and transaction management
     {
         ICaseAssigneeRepository CaseAssignees { get; }
         ICaseParticipantRepository CaseParticipants { get; }
