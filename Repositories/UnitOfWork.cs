@@ -34,7 +34,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
             Cases = cases; // Assign the case repository
             Reports = reports; // Assign the report repository
             CaseAssignees = assignees; // Assign the case assignee repository
-            Participants = participants;
+            Participants = participants; // Assign the participant repository
             CaseParticipants = caseParticipants;
             Evidence = evidence;
             EvidenceAudit = evidenceAudit;
