@@ -11,6 +11,7 @@
     // Dto for Case Participant Create
     public class CaseParticipantCreateDto
     {
+        public int CaseId { get; set; }
         public int? ParticipantId { get; set; } // existing participant (optional)
         public string? FullName { get; set; }
         public string? Phone { get; set; }
