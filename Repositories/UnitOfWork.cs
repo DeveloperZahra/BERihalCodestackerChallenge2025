@@ -30,7 +30,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
             IEvidenceAuditLogRepository evidenceAudit) // Initialize the UnitOfWork with the provided repositories and database context
         {
             _db = db; // Assign the database context
-            Users = users; 
+            Users = users;  // Assign the user repository
             Cases = cases;
             Reports = reports;
             CaseAssignees = assignees;
