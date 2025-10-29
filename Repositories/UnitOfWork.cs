@@ -37,7 +37,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
             Participants = participants; // Assign the participant repository
             CaseParticipants = caseParticipants; // Assign the case participant repository
             Evidence = evidence; // Assign the evidence repository
-            EvidenceAudit = evidenceAudit;
+            EvidenceAudit = evidenceAudit; // Assign the evidence audit log repository
         }
 
         public async Task<int> SaveChangesAsync(CancellationToken ct = default)
