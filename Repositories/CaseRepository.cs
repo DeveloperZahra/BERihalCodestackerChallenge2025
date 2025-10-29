@@ -1,32 +1,44 @@
-﻿using BERihalCodestackerChallenge2025.Data;
+﻿// Repositories/Implementations/CaseRepository.cs
+using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace BERihalCodestackerChallenge2025.Repositories
 {
-    public class CaseRepository : GenericRepository<Case>, ICaseRepository // Repository for Case entity with specific methods
+    public class CaseRepository : GenericRepository<Case>, ICaseRepository // Implementing case-specific data operations
     {
-        private readonly AppDbContext _context; // Database context
-        public CaseRepository(AppDbContext context) : base(context) => _context = context; // Constructor accepting the database context
+        public CaseRepository(AppDbContext db) : base(db) { } // Constructor accepting the database context
 
-        public async Task<Case?> GetDetailsAsync(int id) // Retrieve detailed information about a Case by its ID
+        public async Task<IEnumerable<Case>> SearchAsync(string? q, CancellationToken ct = default) // Search cases by query string in name or description
         {
-            return await _context.Cases
-                .Include(c => c.Assignees) // Include the assignees 
-                .Include(c => c.Evidences) // Include the evidences
-                .Include(c => c.Participants) // Include the participants
-                .Include(c => c.LinkedReports) // Include the linked reports
-                .ThenInclude(l => l.Report) // Include the linked reports and their details
-                .Include(c => c.CreatedByUser) // Include the user who created the case
-                .FirstOrDefaultAsync(c => c.Id == id); // Find the case by ID with all related data
+            var query = _db.Cases.AsNoTracking().Include(c => c.CreatedByUser).AsQueryable(); // Base query including the user who created the case
+            if (!string.IsNullOrWhiteSpace(q)) // If a search query is provided
+                query = query.Where(c => EF.Functions.ILike(c.Name, $"%{q}%") || EF.Functions.ILike(c.Description, $"%{q}%")); // Case-insensitive search in name and description
+            return await query.OrderByDescending(c => c.CreatedAt).ToListAsync(ct); // Order results by creation date descending and convert to a list
         }
 
-        public async Task<IEnumerable<Case>> SearchAsync(string? query) // Search for cases based on a query string
+        public Task<Case?> GetDetailsAsync(int id, CancellationToken ct = default) // Retrieve detailed information about a case by its ID
+            => _db.Cases
+                  .Include(c => c.CreatedByUser) // Include the user who created the case
+                  .Include(c => c.Assignees).ThenInclude(a => a.User) // Include assigned users
+                  .Include(c => c.Evidences) // Include evidences linked to the case
+                  .Include(c => c.Participants).ThenInclude(p => p.Participant) // Include participants involved in the case
+                  .Include(c => c.LinkedReports).ThenInclude(l => l.Report).ThenInclude(r => r.ReportedByUser) // Include linked reports and their reporting users
+                  .FirstOrDefaultAsync(c => c.Id == id, ct); // Find the case by ID
+
+        public Task<bool> ExistsByNumberAsync(string caseNumber, CancellationToken ct = default)// Check if a case exists by its case number
+            => _db.Cases.AnyAsync(c => c.CaseNumber == caseNumber, ct); // Check for existence of the case number
+
+        public async Task LinkReportsAsync(int caseId, IEnumerable<int> reportIds, CancellationToken ct = default) // Link multiple reports to a case
         {
-            var q = _context.Cases.AsQueryable(); // Start with all cases
-            if (!string.IsNullOrWhiteSpace(query)) // If a query is provided
-                q = q.Where(c => c.Name.Contains(query) || c.Description.Contains(query)); // Filter cases by name or description containing the query
-            return await q.Include(c => c.CreatedByUser).ToListAsync(); // Include the user who created the case and return the list
+            var existing = await _db.CaseReports.Where(x => x.CaseId == caseId).Select(x => x.ReportId).ToListAsync(ct); // Get existing linked report IDs for the case
+            var toAdd = reportIds.Distinct().Except(existing).Select(rid => new CaseReport // Create new CaseReport entries for reports not already linked
+            {
+                CaseId = caseId, // Set the case ID
+                ReportId = rid,
+                LinkedAt = DateTime.UtcNow // Set the current timestamp for when the report is linked
+            });
+            await _db.CaseReports.AddRangeAsync(toAdd, ct); // Add the new CaseReport entries to the database
         }
     }
 }

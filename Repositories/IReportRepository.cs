@@ -1,9 +1,10 @@
-﻿using BERihalCodestackerChallenge2025.Model;
+﻿// Repositories/Implementations/ReportRepository.cs
+using BERihalCodestackerChallenge2025.Model;
 
 namespace BERihalCodestackerChallenge2025.Repositories
 {
-    public interface IReportRepository // Report repository interface for crime report-specific operations
+    public interface IReportRepository // Report repository interface extending generic repository for report-specific operations
     {
-        Task<CrimeReport?> GetByTrackingCodeAsync(string trackingCode); // Retrieve a crime report by its tracking code
+        Task<CrimeReport?> GetByTrackingCodeAsync(string trackingCode, CancellationToken ct = default); // Retrieve a crime report by its tracking code
     }
 }
