@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("")]
     [Authorize(Roles = "Admin,Investigator,Officer")]
     public class ParticipantsController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // POST: api/participants
         // Description: Add a new participant (suspect/victim/witness)
         // ================================================================
-        [HttpPost]
+        [HttpPost("CreateParticipant")]
         public async Task<IActionResult> CreateParticipant([FromBody] ParticipantCreateDto dto)
         {
             //  Map DTO → Model
@@ -43,7 +43,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Retrieve all participants (Admin/Investigator only)
         // ================================================================
         [Authorize(Roles = "Admin,Investigator")]
-        [HttpGet]
+        [HttpGet("GetAllParticipants")]
         public async Task<ActionResult<IEnumerable<Participant>>> GetAllParticipants()
         {
             var participants = await _context.Participants.AsNoTracking().ToListAsync();
@@ -54,7 +54,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/participants/{id}
         // Description: Retrieve a specific participant
         // ================================================================
-        [HttpGet("{id:int}")]
+        [HttpGet("GetParticipantById /{id:int}")]
         public async Task<ActionResult<Participant>> GetParticipantById(int id)
         {
             var participant = await _context.Participants.FindAsync(id);
@@ -68,7 +68,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // PUT: api/participants/{id}
         // Description: Update a participant’s data
         // ================================================================
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateParticipant/{id:int}")]
         public async Task<IActionResult> UpdateParticipant(int id, [FromBody] ParticipantCreateDto dto)
         {
             var participant = await _context.Participants.FindAsync(id);
@@ -86,7 +86,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Delete a participant (Admin only)
         // ================================================================
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteParticipant/{id:int}")]
         public async Task<IActionResult> DeleteParticipant(int id)
         {
             var participant = await _context.Participants.FindAsync(id);
@@ -104,7 +104,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Assign participant to a case with a specific role
         // ================================================================
         [Authorize(Roles = "Admin,Investigator")]
-        [HttpPost("assign")]
+        [HttpPost("AddAssignParticipant")]
         public async Task<IActionResult> AssignParticipantToCase([FromBody] CaseParticipantCreateDto dto)
         {
             //  Validate case and participant existence
@@ -152,7 +152,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/participants/case/{caseId}
         // Description: Get all participants in a specific case
         // ================================================================
-        [HttpGet("case/{caseId:int}")]
+        [HttpGet("GetParticipantsByCase/{caseId:int}")]
         public async Task<ActionResult<IEnumerable<CaseParticipantReadDto>>> GetParticipantsByCase(int caseId)
         {
             var caseParticipants = await _context.CaseParticipants

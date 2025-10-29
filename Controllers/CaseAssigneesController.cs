@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("")]
     [Authorize(Roles = "Admin,Investigator")]
     public class CaseAssigneesController : ControllerBase
     {
@@ -26,27 +26,27 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // POST: api/caseassignees
         // Description: Assign an officer/investigator to a case
         // ================================================================
-        [HttpPost]
+        [HttpPost("AssignUserToCase")]
         public async Task<IActionResult> AssignUserToCase([FromBody] CaseAssigneeCreateDto dto)
         {
-            // ✅ Check if case exists
+            //  Check if case exists
             var caseEntity = await _context.Cases.FindAsync(dto.CaseId);
             if (caseEntity == null)
                 return NotFound("Case not found.");
 
-            // ✅ Check if user exists
+            //  Check if user exists
             var user = await _context.Users.FindAsync(dto.UserId);
             if (user == null)
                 return NotFound("User not found.");
 
-            // 🚫 Prevent duplicate assignment
+            //  Prevent duplicate assignment
             bool alreadyAssigned = await _context.CaseAssignees
                 .AnyAsync(a => a.CaseId == dto.CaseId && a.UserId == dto.UserId);
 
             if (alreadyAssigned)
                 return Conflict("User already assigned to this case.");
 
-            // 🧩 Map DTO → Entity
+            //  Map DTO → Entity
             var assignee = _mapper.Map<CaseAssignee>(dto);
             assignee.AssignedAt = DateTime.UtcNow;
             assignee.ProgressStatus = CaseStatus.pending; // default value
@@ -54,7 +54,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             _context.CaseAssignees.Add(assignee);
             await _context.SaveChangesAsync();
 
-            // ✅ Return success response
+            //  Return success response
             return Ok($"User '{user.Username}' assigned successfully to case '{caseEntity.Name}'.");
         }
 
@@ -64,7 +64,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Update progress status (Officer only)
         // ================================================================
         [Authorize(Roles = "Officer,Investigator,Admin")]
-        [HttpPut("progress/{assigneeId:int}")]
+        [HttpPut("UpdateCaseProgress/{assigneeId:int}")]
         public async Task<IActionResult> UpdateProgressStatus(int assigneeId, [FromBody] CaseProgressUpdateDto dto)
         {
             var assignee = await _context.CaseAssignees
@@ -75,7 +75,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             if (assignee == null)
                 return NotFound("Assignee not found.");
 
-            // 🧠 Update allowed field
+            // Update allowed field
             assignee.ProgressStatus = Enum.Parse<CaseStatus>(dto.ProgressStatus, true);
 
             await _context.SaveChangesAsync();
@@ -87,7 +87,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // DELETE: api/caseassignees/{id}
         // Description: Remove an assignee from a case (Admin/Investigator)
         // ================================================================
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteAssignee/{id:int}")]
         public async Task<IActionResult> RemoveAssignee(int id)
         {
             var assignee = await _context.CaseAssignees.FindAsync(id);
@@ -108,7 +108,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             var levels = new[] { "low", "medium", "high", "critical" };
             int userIndex = Array.IndexOf(levels, userClearance.ToLower());
             int caseIndex = Array.IndexOf(levels, caseClearance.ToLower());
-            return userIndex >= caseIndex; // ✅ User must have >= clearance
+            return userIndex >= caseIndex; //  User must have >= clearance
         }
     }
 }

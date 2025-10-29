@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("")]
     [Authorize] //  All authenticated users can access; restrictions inside methods
     public class EvidenceController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // POST: api/evidence
         // Description: Add new evidence (Admin / Investigator / Officer)
         // ================================================================
-        [HttpPost]
+        [HttpPost("AddEvidence")]
         [Authorize(Roles = "Admin,Investigator,Officer")]
         public async Task<IActionResult> AddEvidence([FromBody] EvidenceCreateDto dto)
         {
@@ -70,7 +70,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/evidence/{id}
         // Description: Get evidence by ID
         // ================================================================
-        [HttpGet("{id:int}")]
+        [HttpGet("GetEvidenceById/{id:int}")]
         public async Task<ActionResult<EvidenceReadDto>> GetEvidenceById(int id)
         {
             var evidence = await _context.Evidences
@@ -89,7 +89,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/evidence/{id}/image
         // Description: Get image evidence info
         // ================================================================
-        [HttpGet("{id:int}/image")]
+        [HttpGet("GetImageEvidence{id:int}")]
         public async Task<IActionResult> GetImageEvidence(int id)
         {
             var evidence = await _context.Evidences.FindAsync(id);
@@ -112,7 +112,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // PUT: api/evidence/{id}
         // Description: Update existing evidence (content only)
         // ================================================================
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateEvidence/{id:int}")]
         [Authorize(Roles = "Admin,Investigator")]
         public async Task<IActionResult> UpdateEvidence(int id, [FromBody] EvidenceCreateDto dto)
         {
@@ -152,7 +152,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // DELETE (soft): api/evidence/{id}
         // Description: Soft delete evidence (mark as deleted)
         // ================================================================
-        [HttpDelete("{id:int}")]
+        [HttpDelete("SoftDeleteEvidence/{id:int}")]
         [Authorize(Roles = "Admin,Investigator")]
         public async Task<IActionResult> SoftDeleteEvidence(int id)
         {
@@ -181,7 +181,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // DELETE (hard): api/evidence/hard/{id}
         // Description: Permanently delete evidence (Admin only)
         // ================================================================
-        [HttpDelete("hard/{id:int}")]
+        [HttpDelete("HardDeleteEvidence/{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> HardDeleteEvidence(int id, [FromQuery] string confirm = "")
         {

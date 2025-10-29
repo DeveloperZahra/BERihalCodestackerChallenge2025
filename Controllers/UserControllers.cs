@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("")]
     [Authorize(Roles = "Admin")] // Only Admin can manage users
     public class UsersController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // POST: api/users
         // Description: Create a new user (Admin only)
         // ================================================================
-        [HttpPost]
+        [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] UserCreateUpdateDto dto)
         {
             // Validate if username or email already exists
@@ -51,7 +51,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/users
         // Description: Retrieve all users
         // ================================================================
-        [HttpGet]
+        [HttpGet("GetAllUsers")]
         public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsers()
         {
             var users = await _context.Users.AsNoTracking().ToListAsync();
@@ -62,7 +62,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/users/{id}
         // Description: Retrieve a single user by ID
         // ================================================================
-        [HttpGet("{id:int}")]
+        [HttpGet("GetUserById/{id:int}")]
         public async Task<ActionResult<UserReadDto>> GetUserById(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -75,7 +75,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // PUT: api/users/{id}
         // Description: Update user details (Admin only)
         // ================================================================
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateUser/{id:int}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserCreateUpdateDto dto)
         {
             var user = await _context.Users.FindAsync(id);
@@ -97,7 +97,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // DELETE: api/users/{id}
         // Description: Delete a user (Admin only)
         // ================================================================
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteUser/{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("")]
     public class CrimeReportsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -25,7 +25,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // POST: api/crimereports/public
         // Description: Allow citizens to submit crime reports anonymously.
         // ================================================================
-        [HttpPost("public")]
+        [HttpPost("CreateCrimeReport")]
         [AllowAnonymous] // Citizens can submit reports without authentication
         public async Task<IActionResult> SubmitCrimeReport([FromBody] CrimeReportCreateDto dto)
         {
@@ -57,7 +57,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/crimereports/track/{code}
         // Description: Citizens can track report status using tracking code.
         // ================================================================
-        [HttpGet("track/{code}")]
+        [HttpGet("TrackCrimeReport/{reportId}")]
         [AllowAnonymous]
         public async Task<IActionResult> TrackReportByCode(string code)
         {
@@ -83,7 +83,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/crimereports
         // Description: Admin / Investigator can view all reports.
         // ================================================================
-        [HttpGet]
+        [HttpGet("GetAllCrimeReports")]
         [Authorize(Roles = "Admin, Investigator")]
         public async Task<ActionResult<IEnumerable<CrimeReportStatusDto>>> GetAllReports()
         {
@@ -100,7 +100,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/crimereports/{id}
         // Description: View specific report by ID
         // ================================================================
-        [HttpGet("{id:int}")]
+        [HttpGet("GetCrimeReportById/{id:int}")]
         [Authorize(Roles = "Admin, Investigator")]
         public async Task<ActionResult<CrimeReportStatusDto>> GetReportById(int id)
         {
@@ -118,7 +118,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // PUT: api/crimereports/{id}/status
         // Description: Admin / Investigator can update report status
         // ================================================================
-        [HttpPut("{id:int}/status")]
+        [HttpPut("UpdateCrimeReportStatus/{id:int}")]
         [Authorize(Roles = "Admin, Investigator")]
         public async Task<IActionResult> UpdateReportStatus(int id, [FromBody] string status)
         {

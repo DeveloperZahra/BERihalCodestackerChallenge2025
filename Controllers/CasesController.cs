@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    [Authorize] // ✅ Admin, Investigator, Officer (roles checked per-action)
+    [Route("")]
+    [Authorize] //  Admin, Investigator, Officer (roles checked per-action)
     public class CasesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -26,11 +26,11 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // POST: api/cases
         // Description: Create a new case and link to existing crime reports
         // ================================================================
-        [HttpPost]
+        [HttpPost("CreateCase")]
         [Authorize(Roles = "Admin,Investigator")]
         public async Task<IActionResult> CreateCase([FromBody] CaseCreateDto dto)
         {
-            // 🧩 Map DTO → Model
+            //  Map DTO → Model
             var newCase = _mapper.Map<Case>(dto);
             newCase.CreatedAt = DateTime.UtcNow;
 
@@ -46,7 +46,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             _context.Cases.Add(newCase);
             await _context.SaveChangesAsync();
 
-            // 🔗 Link crime reports if provided
+            //  Link crime reports if provided
             if (dto.ReportIds != null && dto.ReportIds.Any())
             {
                 foreach (var reportId in dto.ReportIds)
@@ -72,7 +72,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // PUT: api/cases/{id}
         // Description: Update an existing case (Admin or Investigator)
         // ================================================================
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateCase/{id:int}")]
         [Authorize(Roles = "Admin,Investigator")]
         public async Task<IActionResult> UpdateCase(int id, [FromBody] CaseUpdateDto dto)
         {
@@ -91,7 +91,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/cases
         // Description: Return list of all cases with 100-char trimmed description
         // ================================================================
-        [HttpGet]
+        [HttpGet("GetAllCases")]
         [Authorize(Roles = "Admin,Investigator,Officer")]
         public async Task<ActionResult<IEnumerable<CaseListItemDto>>> GetAllCases([FromQuery] string? search)
         {
@@ -99,7 +99,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
                 .Include(c => c.CreatedByUser)
                 .AsQueryable();
 
-            // 🔍 Search by name or description
+            //  Search by name or description
             if (!string.IsNullOrWhiteSpace(search))
                 query = query.Where(c => c.Name.Contains(search) || c.Description.Contains(search));
 
@@ -113,7 +113,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/cases/{id}
         // Description: Case details including counts of related entities
         // ================================================================
-        [HttpGet("{id:int}")]
+        [HttpGet("GetCaseById/{id:int}")]
         [Authorize(Roles = "Admin,Investigator,Officer")]
         public async Task<IActionResult> GetCaseById(int id)
         {
@@ -141,30 +141,30 @@ namespace BERihalCodestackerChallenge2025.Controllers
             return Ok(dto);
         }
 
-        // ================================================================
-        // GET: api/cases/{id}/assignees
-        // Description: List all assigned officers/investigators
-        // ================================================================
-        [HttpGet("{id:int}/assignees")]
-        [Authorize(Roles = "Admin,Investigator,Officer")]
-        public async Task<IActionResult> GetCaseAssignees(int id)
-        {
-            var assignees = await _context.CaseAssignees
-                .Include(a => a.User)
-                .Where(a => a.CaseId == id)
-                .ToListAsync();
+        //// ================================================================
+        //// GET: api/cases/{id}/assignees
+        //// Description: List all assigned officers/investigators
+        //// ================================================================
+        //[HttpGet("{id:int}/assignees")]
+        //[Authorize(Roles = "Admin,Investigator,Officer")]
+        //public async Task<IActionResult> GetCaseAssignees(int id)
+        //{
+        //    var assignees = await _context.CaseAssignees
+        //        .Include(a => a.User)
+        //        .Where(a => a.CaseId == id)
+        //        .ToListAsync();
 
-            if (!assignees.Any())
-                return NotFound("No assignees found for this case.");
+        //    if (!assignees.Any())
+        //        return NotFound("No assignees found for this case.");
 
-            return Ok(_mapper.Map<IEnumerable<CaseAssigneeDto>>(assignees));
-        }
+        //    return Ok(_mapper.Map<IEnumerable<CaseAssigneeDto>>(assignees));
+        //}
 
         // ================================================================
         // GET: api/cases/{id}/evidence
         // Description: List all evidence for this case
         // ================================================================
-        [HttpGet("{id:int}/evidence")]
+        [HttpGet("GetCaseEvidences/{id:int}")]
         [Authorize(Roles = "Admin,Investigator,Officer")]
         public async Task<IActionResult> GetCaseEvidences(int id)
         {
@@ -183,7 +183,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // DELETE: api/cases/{id}
         // Description: Delete a case (Admin only)
         // ================================================================
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteCase/{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCase(int id)
         {
