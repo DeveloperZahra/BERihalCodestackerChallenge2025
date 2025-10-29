@@ -16,7 +16,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public IParticipantRepository Participants { get; } // Participant repository for managing participant data
         public ICaseParticipantRepository CaseParticipants { get; } // Case participant repository for managing case-participant relationships
         public IEvidenceRepository Evidence { get; } // Evidence repository for managing evidence data
-        public IEvidenceAuditLogRepository EvidenceAudit { get; }
+        public IEvidenceAuditLogRepository EvidenceAudit { get; } // Evidence audit log repository for managing audit logs
 
         public UnitOfWork(
             AppDbContext db,
