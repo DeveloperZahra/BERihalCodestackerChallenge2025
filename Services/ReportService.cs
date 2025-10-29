@@ -5,70 +5,71 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BERihalCodestackerChallenge2025.Services
 {
-    public class ReportService 
+    public class ReportService : IReportService
+    // Service for handling crime report submissions and status retrieval
     {
-        private readonly IUnitOfWork _uow;
-        public ReportService(IUnitOfWork uow) => _uow = uow;
+        private readonly IUnitOfWork _uow; // Unit of Work for managing repositories and transactions
+        public ReportService(IUnitOfWork uow) => _uow = uow; // Constructor accepting the Unit of Work
 
-        public async Task<CrimeReportStatusDto> SubmitAsync(CrimeReportCreateDto dto, CancellationToken ct = default)
+        public async Task<CrimeReportStatusDto> SubmitAsync(CrimeReportCreateDto dto, CancellationToken ct = default) // Submit a new crime report
         {
-            User? reportedBy = null;
-            if (dto.ReportedByUserId is not null)
+            User? reportedBy = null; // Variable to hold the reporting user, if any
+            if (dto.ReportedByUserId is not null) // If a reporting user ID is provided
             {
-                reportedBy = await _uow.Users.GetByIdAsync(dto.ReportedByUserId.Value, ct);
-                if (reportedBy is null || (reportedBy.Role != Role.Admin && reportedBy.Role != Role.Investigator))
-                    throw new InvalidOperationException("reported_by must be Admin or Investigator, or null for Citizen.");
+                reportedBy = await _uow.Users.GetByIdAsync(dto.ReportedByUserId.Value, ct); // Retrieve the user from the database
+                if (reportedBy is null || (reportedBy.Role != Role.Admin && reportedBy.Role != Role.Investigator)) // Validate the user's role
+                    throw new InvalidOperationException("reported_by must be Admin or Investigator, or null for Citizen."); // Throw an exception if the user is invalid
             }
 
-            var tracking = $"CR-{DateTime.UtcNow:yyyy}-{Random.Shared.Next(1, 999999):000000}";
-            var entity = new CrimeReport
+            var tracking = $"CR-{DateTime.UtcNow:yyyy}-{Random.Shared.Next(1, 999999):000000}"; // Generate a unique tracking code for the report
+            var entity = new CrimeReport // Create a new CrimeReport entity
             {
-                Title = dto.Title,
-                Description = dto.Description,
-                AreaCity = dto.AreaCity,
-                Latitude = dto.Latitude,
-                Longitude = dto.Longitude,
-                Status = ReportStatus.pending,
-                TrackingCode = tracking,
-                ReportedByUserId = dto.ReportedByUserId
+                Title = dto.Title, // Short title of the crime report
+                Description = dto.Description, // Detailed description of the crime
+                AreaCity = dto.AreaCity, // City where the crime occurred
+                Latitude = dto.Latitude, // Geographic coordinates of the crime location
+                Longitude = dto.Longitude, // Geographic coordinates of the crime location
+                Status = ReportStatus.pending, // Initial status of the report
+                TrackingCode = tracking, // Set the generated tracking code
+                ReportedByUserId = dto.ReportedByUserId // Set the reporting user ID
             };
-            await _uow.Reports.AddAsync(entity, ct);
-            await _uow.SaveChangesAsync(ct);
+            await _uow.Reports.AddAsync(entity, ct); // Add the new report to the repository
+            await _uow.SaveChangesAsync(ct); // Save changes to the database
 
-            return new CrimeReportStatusDto
+            return new CrimeReportStatusDto // Return the status of the submitted report
             {
-                Id = entity.Id,
-                TrackingCode = entity.TrackingCode,
-                Status = entity.Status.ToString(),
-                AreaCity = entity.AreaCity,
-                ReportedBy = reportedBy?.Username ?? "Citizen",
-                ReportDateTime = entity.ReportDateTime
+                Id = entity.Id, // Unique identifier of the report
+                TrackingCode = entity.TrackingCode, //  Tracking code of the report
+                Status = entity.Status.ToString(), // Current status of the report
+                AreaCity = entity.AreaCity, // City where the crime occurred
+                ReportedBy = reportedBy?.Username ?? "Citizen", // Username of the reporting user or "Citizen" if null
+                ReportDateTime = entity.ReportDateTime // Timestamp of when the report was created
             };
         }
 
-        public async Task<CrimeReportStatusDto?> GetStatusAsync(string idOrTracking, CancellationToken ct = default)
+        public async Task<CrimeReportStatusDto?> GetStatusAsync(string idOrTracking, CancellationToken ct = default) // Retrieve the status of a crime report by ID or tracking code
         {
-            CrimeReport? report = null;
+            CrimeReport? report = null; // Variable to hold the retrieved report
 
-            if (int.TryParse(idOrTracking, out var id))
-                report = await _uow.Reports.GetByIdAsync(id, ct);
+            if (int.TryParse(idOrTracking, out var id)) // If the input can be parsed as an integer ID
+                report = await _uow.Reports.GetByIdAsync(id, ct); // Retrieve the report by ID
             else
-                report = await _uow.Reports.GetByTrackingCodeAsync(idOrTracking, ct);
+                report = await _uow.Reports.GetByTrackingCodeAsync(idOrTracking, ct); // Retrieve the report by tracking code
 
-            if (report is null) return null;
+            if (report is null) return null; // Return null if the report is not found
 
-            var reportedBy = report.ReportedByUserId is null ? "Citizen"
-                : (await _uow.Users.GetByIdAsync(report.ReportedByUserId.Value, ct))?.Username;
+            var reportedBy = report.ReportedByUserId is null ? "Citizen" // Get the reporting user's username or "Citizen" if null
+                : (await _uow.Users.GetByIdAsync(report.ReportedByUserId.Value, ct))?.Username; // Retrieve the reporting user from the database
 
-            return new CrimeReportStatusDto
+            return new CrimeReportStatusDto // Return the status of the retrieved report
             {
-                Id = report.Id,
-                TrackingCode = report.TrackingCode,
-                Status = report.Status.ToString(),
-                AreaCity = report.AreaCity,
-                ReportedBy = reportedBy,
-                ReportDateTime = report.ReportDateTime
-            };
+                Id = report.Id, // Unique identifier of the report
+                TrackingCode = report.TrackingCode, // Tracking code of the report
+                Status = report.Status.ToString(), // Current status of the report
+                AreaCity = report.AreaCity, // City where the crime occurred
+                ReportedBy = reportedBy, // Username of the reporting user or "Citizen"
+                ReportDateTime = report.ReportDateTime // Timestamp of when the report was created
+            }; // Return the populated DTO
         }
     }
 }
