@@ -56,7 +56,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public async Task RollbackTransactionAsync(CancellationToken ct = default) // Rollback the current database transaction
         {
-            if (_txn != null) await _txn.RollbackAsync(ct);
+            if (_txn != null) await _txn.RollbackAsync(ct); // Rollback the transaction if it exists
         }
 
         public ValueTask DisposeAsync() => _db.DisposeAsync();
