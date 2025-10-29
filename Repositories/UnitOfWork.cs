@@ -59,6 +59,6 @@ namespace BERihalCodestackerChallenge2025.Repositories
             if (_txn != null) await _txn.RollbackAsync(ct); // Rollback the transaction if it exists
         }
 
-        public ValueTask DisposeAsync() => _db.DisposeAsync();
+        public ValueTask DisposeAsync() => _db.DisposeAsync(); // Dispose of the database context asynchronously
     }
 }
