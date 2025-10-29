@@ -45,7 +45,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
 
         public async Task<IDisposable> BeginTransactionAsync(CancellationToken ct = default) // Begin a new database transaction
         {
-            _txn = await _db.Database.BeginTransactionAsync(ct);
+            _txn = await _db.Database.BeginTransactionAsync(ct); // Start a new transaction
             return _txn;
         }
 
