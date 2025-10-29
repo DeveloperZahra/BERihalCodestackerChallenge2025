@@ -40,6 +40,8 @@ namespace BERihalCodestackerChallenge2025.Repositories
             EvidenceAudit = evidenceAudit; // Assign the evidence audit log repository
         }
 
+       
+
         public async Task<int> SaveChangesAsync(CancellationToken ct = default) // Persist changes to the database
             => await _db.SaveChangesAsync(ct); // Save all changes made in the context to the database
 

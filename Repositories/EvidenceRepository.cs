@@ -2,13 +2,16 @@
 using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace BERihalCodestackerChallenge2025.Repositories
 {
     public class EvidenceRepository : GenericRepository<Evidence>, IEvidenceRepository // Implements evidence-specific data operations
     {
         public EvidenceRepository(AppDbContext db) : base(db) { } // Constructor accepting the database context
+        // add new evidence 
 
+        
         public Task<Evidence?> GetWithUserAsync(int id, CancellationToken ct = default) // Retrieve evidence by ID including the user who added it
             => _db.Evidences.Include(e => e.AddedByUser).FirstOrDefaultAsync(e => e.Id == id, ct); // Find the evidence by ID
 
