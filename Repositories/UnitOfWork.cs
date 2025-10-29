@@ -32,7 +32,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
             _db = db; // Assign the database context
             Users = users;  // Assign the user repository
             Cases = cases; // Assign the case repository
-            Reports = reports;
+            Reports = reports; // Assign the report repository
             CaseAssignees = assignees;
             Participants = participants;
             CaseParticipants = caseParticipants;
