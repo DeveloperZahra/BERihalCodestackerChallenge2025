@@ -26,11 +26,11 @@ namespace BERihalCodestackerChallenge2025.Repositories
             ICaseAssigneeRepository assignees,
             IParticipantRepository participants,
             ICaseParticipantRepository caseParticipants,
-            IEvidenceRepository evidence,
+            IEvidenceRepository evidence, 
             IEvidenceAuditLogRepository evidenceAudit) // Initialize the UnitOfWork with the provided repositories and database context
         {
-            _db = db;
-            Users = users;
+            _db = db; // Assign the database context
+            Users = users; 
             Cases = cases;
             Reports = reports;
             CaseAssignees = assignees;
