@@ -34,7 +34,8 @@ namespace BERihalCodestackerChallenge2025.Controllers
 
             // Citizen reports anonymously (no user linked)
             report.ReportedByUserId = null;
-            report.Status = "pending";
+            report.Status = ReportStatus.pending;
+
             report.ReportDateTime = DateTime.UtcNow;
 
             // Generate tracking code after save
@@ -125,7 +126,8 @@ namespace BERihalCodestackerChallenge2025.Controllers
             if (report == null)
                 return NotFound("Report not found.");
 
-            report.Status = status;
+            report.Status = ReportStatus.resolved;
+            
             await _context.SaveChangesAsync();
 
             return Ok(new { message = $"Status updated to '{status}'." });

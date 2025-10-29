@@ -24,7 +24,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public DateTime ReportDateTime { get; set; } = DateTime.UtcNow; // Date and time when the report was created
 
         [Required]
-        public string Status { get; set; } = "pending"; // Current status of the report
+        public ReportStatus Status { get; set; }  // Current status of the report
 
         // Citizen = NULL
         public int? ReportedByUserId { get; set; } // Foreign key to the user who reported the crime
