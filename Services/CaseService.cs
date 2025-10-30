@@ -4,12 +4,12 @@ using BERihalCodestackerChallenge2025.Repositories;
 
 namespace BERihalCodestackerChallenge2025.Services
 {
-    public class CaseService : ICaseService
+    public class CaseService : ICaseService 
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IUnitOfWork _uow; 
         private readonly IGenericRepository<Case> _cases; 
 
-        public CaseService(IUnitOfWork uow, IGenericRepository<Case> casesRepo)
+        public CaseService(IUnitOfWork uow, IGenericRepository<Case> casesRepo) 
         {
             _uow = uow;
             _cases = casesRepo;
