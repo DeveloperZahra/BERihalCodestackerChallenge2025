@@ -25,7 +25,7 @@ namespace BERihalCodestackerChallenge2025.Services
 
             return new UserReadDto // Return a DTO representing the created user
             {
-                Id = user.Id, 
+                Id = user.UserId, 
                 Username = user.Username, 
                 Email = user.Email,
                 Role = user.Role.ToString(),

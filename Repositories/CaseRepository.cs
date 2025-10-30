@@ -24,7 +24,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
                   .Include(c => c.Evidences) // Include evidences linked to the case
                   .Include(c => c.Participants).ThenInclude(p => p.Participant) // Include participants involved in the case
                   .Include(c => c.LinkedReports).ThenInclude(l => l.Report).ThenInclude(r => r.ReportedByUser) // Include linked reports and their reporting users
-                  .FirstOrDefaultAsync(c => c.Id == id, ct); // Find the case by ID
+                  .FirstOrDefaultAsync(c => c.CaseId == id, ct); // Find the case by ID
 
         public Task<bool> ExistsByNumberAsync(string caseNumber, CancellationToken ct = default)// Check if a case exists by its case number
             => _db.Cases.AnyAsync(c => c.CaseNumber == caseNumber, ct); // Check for existence of the case number

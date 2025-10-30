@@ -9,5 +9,7 @@
     {
         public int CaseId { get; set; }     //  ID of the case
         public int UserId { get; set; }     //  ID of the assigned user
+        public string ClearanceLevel { get; set; } //
+
     }
 }

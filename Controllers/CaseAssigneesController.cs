@@ -22,93 +22,130 @@ namespace BERihalCodestackerChallenge2025.Controllers
             _mapper = mapper;
         }
 
-        // ================================================================
-        // POST: api/caseassignees
-        // Description: Assign an officer/investigator to a case
-        // ================================================================
-        [HttpPost("AssignUserToCase")]
-        public async Task<IActionResult> AssignUserToCase([FromBody] CaseAssigneeCreateDto dto)
+        // ======================================================
+        // POST: api/CaseAssignees/AssignUserToCase
+        // Description: Assign a user to a specific case
+        // ======================================================
+        [HttpPost("assign")]
+        public IActionResult AssignUserToCase([FromBody] CaseAssigneeCreateDto dto)
         {
-            //  Check if case exists
-            var caseEntity = await _context.Cases.FindAsync(dto.CaseId);
+            //  Step 1: Validate input
+            if (dto == null || dto.CaseId <= 0 || dto.UserId <= 0)
+                return BadRequest("Invalid case or user information.");
+
+            //  Step 2: Check if case and user exist
+            var caseEntity = _context.Cases.FirstOrDefault(c => c.CaseId == dto.CaseId);
+            var userEntity = _context.Users.FirstOrDefault(u => u.UserId == dto.UserId);
+
             if (caseEntity == null)
-                return NotFound("Case not found.");
+                return NotFound($"Case with ID {dto.CaseId} not found.");
+            if (userEntity == null)
+                return NotFound($"User with ID {dto.UserId} not found.");
 
-            //  Check if user exists
-            var user = await _context.Users.FindAsync(dto.UserId);
-            if (user == null)
-                return NotFound("User not found.");
-
-            //  Prevent duplicate assignment
-            bool alreadyAssigned = await _context.CaseAssignees
-                .AnyAsync(a => a.CaseId == dto.CaseId && a.UserId == dto.UserId);
-
+            //  Step 3: Check if already assigned
+            bool alreadyAssigned = _context.CaseAssignees.Any(a => a.CaseId == dto.CaseId && a.UserId == dto.UserId);
             if (alreadyAssigned)
-                return Conflict("User already assigned to this case.");
+                return Conflict("User is already assigned to this case.");
 
-            //  Map DTO → Entity
-            var assignee = _mapper.Map<CaseAssignee>(dto);
-            assignee.AssignedAt = DateTime.UtcNow;
-            assignee.ProgressStatus = CaseStatus.pending; // default value
+            //  Step 4: Create new assignment object
+            var assignment = new CaseAssignee
+            {
+                CaseId = dto.CaseId,
+                UserId = dto.UserId,
+                AssignedAt = DateTime.UtcNow,
+                ClearanceLevel = dto.ClearanceLevel
+            };
 
-            _context.CaseAssignees.Add(assignee);
-            await _context.SaveChangesAsync();
+            //  Step 5: Add to database
+            _context.CaseAssignees.Add(assignment);
+            _context.SaveChanges();
 
-            //  Return success response
-            return Ok($"User '{user.Username}' assigned successfully to case '{caseEntity.Name}'.");
+            //  Step 6: Return success response (⚠️ notice variable inside same scope)
+            return Ok(new
+            {
+                Message = "User assigned successfully to case.",
+                CaseAssigneeId = assignment.CaseAssigneeId, 
+                assignment.CaseId,
+                assignment.UserId,
+                assignment.ClearanceLevel
+            });
         }
 
+        // ============================================================
+        //  Get all assignees for a specific case
+        // ============================================================
+        [HttpGet("GetAllAssignees")]
+        public IActionResult GetAssigneesByCase(int caseId)
+        {
+            var caseExists = _context.Cases.Any(c => c.CaseId == caseId);
+            if (!caseExists)
+                return NotFound($"Case with ID {caseId} not found.");
 
-        // ================================================================
-        // PUT: api/caseassignees/progress/{assigneeId}
-        // Description: Update progress status (Officer only)
-        // ================================================================
+            var assignees = _context.CaseAssignees
+                .Where(a => a.CaseId == caseId)
+                .Select(a => new
+                {
+                    a.CaseAssigneeId,
+                    a.CaseId,
+                    a.UserId,
+                    a.AssignedAt,
+                    a.ClearanceLevel
+                })
+                .ToList();
+
+            return Ok(assignees);
+        }
+    
+       // ================================================================
+       // Description: Update progress status (Officer only)
+      // ================================================================
         [Authorize(Roles = "Officer,Investigator,Admin")]
-        [HttpPut("UpdateCaseProgress/{assigneeId:int}")]
-        public async Task<IActionResult> UpdateProgressStatus(int assigneeId, [FromBody] CaseProgressUpdateDto dto)
-        {
-            var assignee = await _context.CaseAssignees
-                .Include(a => a.Case)
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(a => a.Id == assigneeId);
+            [HttpPut("UpdateCaseProgress/{assigneeId:int}")]
+            public async Task<IActionResult> UpdateProgressStatus(int assigneeId, [FromBody] CaseProgressUpdateDto dto)
+            {
+                var assignee = await _context.CaseAssignees
+                    .Include(a => a.Case)
+                    .Include(a => a.User)
+                    .FirstOrDefaultAsync(a => a.CaseAssigneeId == assigneeId);
 
-            if (assignee == null)
-                return NotFound("Assignee not found.");
+                if (assignee == null)
+                    return NotFound("Assignee not found.");
 
-            // Update allowed field
-            assignee.ProgressStatus = Enum.Parse<CaseStatus>(dto.ProgressStatus, true);
+                // Update allowed field
+                assignee.ProgressStatus = Enum.Parse<CaseStatus>(dto.ProgressStatus, true);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            return Ok($"Progress updated for user {assignee.User.Username} on case {assignee.Case.Name}.");
-        }
+                return Ok($"Progress updated for user {assignee.User.Username} on case {assignee.Case.Name}.");
+            }
 
-        // ================================================================
-        // DELETE: api/caseassignees/{id}
-        // Description: Remove an assignee from a case (Admin/Investigator)
-        // ================================================================
-        [HttpDelete("DeleteAssignee/{id:int}")]
-        public async Task<IActionResult> RemoveAssignee(int id)
-        {
-            var assignee = await _context.CaseAssignees.FindAsync(id);
-            if (assignee == null)
-                return NotFound("Assignee not found.");
+            // ================================================================
+            // DELETE: api/caseassignees/{id}
+            // Description: Remove an assignee from a case (Admin/Investigator)
+            // ================================================================
+            [HttpDelete("DeleteAssignee/{id:int}")]
+            public async Task<IActionResult> RemoveAssignee(int id)
+            {
+                var assignee = await _context.CaseAssignees.FindAsync(id);
+                if (assignee == null)
+                    return NotFound("Assignee not found.");
 
-            _context.CaseAssignees.Remove(assignee);
-            await _context.SaveChangesAsync();
+                _context.CaseAssignees.Remove(assignee);
+                await _context.SaveChangesAsync();
 
-            return Ok($"Assignee with ID {id} removed successfully.");
-        }
+                return Ok($"Assignee with ID {id} removed successfully.");
+            }
 
-        // ================================================================
-        // Helper: Validate clearance level rule
-        // ================================================================
-        private bool HasValidClearance(string userClearance, string caseClearance)
-        {
-            var levels = new[] { "low", "medium", "high", "critical" };
-            int userIndex = Array.IndexOf(levels, userClearance.ToLower());
-            int caseIndex = Array.IndexOf(levels, caseClearance.ToLower());
-            return userIndex >= caseIndex; //  User must have >= clearance
+            // ================================================================
+            // Helper: Validate clearance level rule
+            // ================================================================
+            private bool HasValidClearance(string userClearance, string caseClearance)
+            {
+                var levels = new[] { "low", "medium", "high", "critical" };
+                int userIndex = Array.IndexOf(levels, userClearance.ToLower());
+                int caseIndex = Array.IndexOf(levels, caseClearance.ToLower());
+                return userIndex >= caseIndex; //  User must have >= clearance
+            }
         }
     }
-}
+

@@ -31,10 +31,10 @@ namespace BERihalCodestackerChallenge2025.Services
             await _uow.Cases.AddAsync(entity, ct); // Add the new case entity to the repository
 
             if (dto.ReportIds is not null && dto.ReportIds.Count > 0) 
-                await _uow.Cases.LinkReportsAsync(entity.Id, dto.ReportIds, ct); // Link any associated reports to the case
+                await _uow.Cases.LinkReportsAsync(entity.CaseId, dto.ReportIds, ct); // Link any associated reports to the case
 
             await _uow.SaveChangesAsync(ct); // Save changes to the database
-            return (entity.Id, entity.CaseNumber); // Return the new case ID and case number
+            return (entity.CaseId, entity.CaseNumber); // Return the new case ID and case number
         }
 
         public async Task UpdateAsync(int caseId, CaseUpdateDto dto, CancellationToken ct = default) // Update an existing case with new details

@@ -12,7 +12,7 @@ namespace BERihalCodestackerChallenge2025.Model
     public class Case // Represents a case in the system
     {
         [Key]
-        public int Id { get; set; } // Primary key
+        public int CaseId { get; set; } // Primary key
 
         [Required, MaxLength(32)] // Unique case number
         [RegularExpression(@"^[A-Z]{3,6}-\d{4}-\d{1,6}$")] // CASE-2025-001
@@ -53,5 +53,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public ICollection<CaseParticipant>? Participants { get; set; } //  Participants involved in the case
         public ICollection<CaseReport>? LinkedReports { get; set; } // Reports linked to the case
         public ICollection<CaseParticipant> CaseParticipants { get; set; }
+        public ICollection<CaseAssignee> CaseAssignees { get; set; }
+
     }
 }

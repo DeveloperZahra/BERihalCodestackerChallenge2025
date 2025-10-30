@@ -11,7 +11,7 @@ namespace BERihalCodestackerChallenge2025.Model
     public class User // Represents a user in the system
     {
         [Key]
-        public int Id { get; set; } // Primary key
+        public int UserId { get; set; } // Primary key
 
         [Required, MaxLength(64)] // Username must be unique
         public string Username { get; set; } = default!; // User's unique username
@@ -34,7 +34,7 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp of user creation
 
-
+        public ICollection<CaseAssignee> CaseAssignees { get; set; }
         public ICollection<Case>? CreatedCases { get; set; } // Cases created by the user
         public ICollection<CaseAssignee>? CaseAssignments { get; set; } // Cases assigned to the user
     }

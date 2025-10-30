@@ -44,7 +44,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             await _context.SaveChangesAsync();
 
             var result = _mapper.Map<UserReadDto>(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, result);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, result);
         }
 
         // ================================================================
