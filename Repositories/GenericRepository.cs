@@ -18,6 +18,8 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public virtual async Task<T?> GetByIdAsync(int id, CancellationToken ct = default) // Retrieve an entity by its ID
             => await _set.FindAsync(new object?[] { id }, ct); // Use FindAsync to locate the entity by its primary key
 
+      
+
         public virtual async Task<IEnumerable<T>> GetAllAsync(CancellationToken ct = default) // Retrieve all entities of type T
             => await _set.AsNoTracking().ToListAsync(ct); // Use AsNoTracking for read-only operations and convert to a list
 
@@ -30,5 +32,9 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public virtual void Update(T entity) => _set.Update(entity); // Update an existing entity in the database
 
         public virtual void Delete(T entity) => _set.Remove(entity); // Delete an entity from the database
+
+
+       
+
     }
 }

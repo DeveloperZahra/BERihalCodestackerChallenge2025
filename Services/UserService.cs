@@ -1,74 +1,100 @@
-﻿using BERihalCodestackerChallenge2025.DTOs;
+﻿// Services/UserService.cs
+using BERihalCodestackerChallenge2025.DTOs;
 using BERihalCodestackerChallenge2025.Model;
 using BERihalCodestackerChallenge2025.Repositories;
 
 namespace BERihalCodestackerChallenge2025.Services
 {
-    public class UserService : IUserService // Service for managing user-related operations
+    // Service for managing user-related operations
+    public class UserService : IUserService
     {
-        private readonly IUnitOfWork _uow; // Unit of Work for accessing repositories
-        public UserService(IUnitOfWork uow) => _uow = uow; // Constructor accepting the Unit of Work
+        private readonly IUnitOfWork _uow;                  
+        private readonly IGenericRepository<User> _users;   
 
-        public async Task<UserReadDto> CreateAsync(UserCreateUpdateDto dto, CancellationToken ct = default) // Create a new user
+        public UserService(IUnitOfWork uow, IGenericRepository<User> usersRepo)
         {
-            var user = new User // Create a new User entity from the provided DTO
-            {
-                Username = dto.Username, 
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password), // Hash the password for secure storage
-                Role = Enum.Parse<Role>(dto.Role, true),
-                ClearanceLevel = Enum.Parse<Clearance>(dto.ClearanceLevel, true),  // Parse role and clearance level from strings
-                CreatedAt = DateTime.UtcNow // Set the creation timestamp
-            };
-            await _uow.Users.AddAsync(user, ct); // Add the new user to the repository
-            await _uow.SaveChangesAsync(ct); // Persist changes to the database
+            _uow = uow;
+            _users = usersRepo;
+        }
 
-            return new UserReadDto // Return a DTO representing the created user
+        public async Task<UserReadDto> CreateAsync(UserCreateUpdateDto dto, CancellationToken ct = default)
+        {
+            if (!Enum.TryParse<Role>(dto.Role, true, out var role))
+                throw new ArgumentException("Invalid role.");
+            if (!Enum.TryParse<Clearance>(dto.ClearanceLevel, true, out var level))
+                throw new ArgumentException("Invalid clearance level.");
+
+            var user = new User
             {
-                Id = user.Id, 
-                Username = user.Username, 
+                Username = dto.Username,
+                Email = dto.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                Role = role,
+                ClearanceLevel = level,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _users.AddAsync(user, ct);
+            await _uow.SaveChangesAsync(ct);
+
+            return new UserReadDto
+            {
+                Id = user.Id,
+                Username = user.Username,
                 Email = user.Email,
                 Role = user.Role.ToString(),
                 ClearanceLevel = user.ClearanceLevel.ToString(),
                 CreatedAt = user.CreatedAt
-            }; // Return the created user details
+            };
         }
 
-        public async Task<UserReadDto?> GetByIdAsync(int id, CancellationToken ct = default) // Retrieve a user by ID
+        public async Task<UserReadDto?> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            var u = await _uow.Users.GetByIdAsync(id, ct); // Get the user entity from the repository
-            if (u is null) return null; // Return null if the user is not found
-            return new UserReadDto // Map the user entity to a DTO
+            var u = await _users.GetByIdAsync(id, ct);
+            if (u is null) return null;
+
+            return new UserReadDto
             {
-                Id = u.Id, 
+                Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
                 Role = u.Role.ToString(),
                 ClearanceLevel = u.ClearanceLevel.ToString(),
                 CreatedAt = u.CreatedAt
-            }; // Return the user details
+            };
         }
 
-        public async Task UpdateAsync(int id, UserCreateUpdateDto dto, CancellationToken ct = default) // Update an existing user
+        public async Task UpdateAsync(int id, UserCreateUpdateDto dto, CancellationToken ct = default)
         {
-            var user = await _uow.Users.GetByIdAsync(id, ct) ?? throw new KeyNotFoundException("User not found."); // Get the user entity or throw if not found
-            user.Username = dto.Username; // Update username
-            user.Email = dto.Email; // Update email
-            user.Role = Enum.Parse<Role>(dto.Role, true);
-            user.ClearanceLevel = Enum.Parse<Clearance>(dto.ClearanceLevel, true); // Update role and clearance level
+            var user = await _users.GetByIdAsync(id, ct)
+                       ?? throw new KeyNotFoundException("User not found.");
+
+            if (!Enum.TryParse<Role>(dto.Role, true, out var role))
+                throw new ArgumentException("Invalid role.");
+            if (!Enum.TryParse<Clearance>(dto.ClearanceLevel, true, out var level))
+                throw new ArgumentException("Invalid clearance level.");
+
+            user.Username = dto.Username;
+            user.Email = dto.Email;
+            user.Role = role;
+            user.ClearanceLevel = level;
+
             if (!string.IsNullOrWhiteSpace(dto.Password))
-                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password); // Update password if provided
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-            _uow.Users.Update(user); // Mark the user entity as updated
-            await _uow.SaveChangesAsync(ct); // Persist changes to the database
+            _users.Update(user);
+            await _uow.SaveChangesAsync(ct);
         }
 
-        public async Task DeleteAsync(int id, CancellationToken ct = default) // Delete a user by ID
+        public async Task DeleteAsync(int id, CancellationToken ct = default)
         {
-            var user = await _uow.Users.GetByIdAsync(id, ct) ?? throw new KeyNotFoundException("User not found."); // Get the user entity or throw if not found
-            _uow.Users.Delete(user); // Mark the user entity for deletion
-            await _uow.SaveChangesAsync(ct); // Persist changes to the database
+            var user = await _users.GetByIdAsync(id, ct)
+                       ?? throw new KeyNotFoundException("User not found.");
+
+            _users.Delete(user);
+            await _uow.SaveChangesAsync(ct);
         }
     }
 }
+
 

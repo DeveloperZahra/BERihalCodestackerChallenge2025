@@ -11,5 +11,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         Task<IEnumerable<T>> GetAllAsync(CancellationToken ct = default); // Retrieve all entities of type T
         Task<T?> GetByIdAsync(int id, CancellationToken ct = default); // Retrieve an entity by its ID
         void Update(T entity); // Update an existing entity in the database
+
+        
     }
 }
