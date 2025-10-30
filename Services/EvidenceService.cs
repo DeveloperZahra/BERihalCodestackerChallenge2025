@@ -18,10 +18,10 @@ namespace BERihalCodestackerChallenge2025.Services
         private static readonly Dictionary<(int evidenceId, int userId), string> PendingHardDeletes = new();
 
         public EvidenceService(IUnitOfWork uow, IGenericRepository<Evidence> EvidencegenericRepository , IGenericRepository<EvidenceAuditLog> EvidenceAuditLoggenericRepository) {
-            _uow = uow;
+            _uow = uow; 
 
-            _EvidencegenericRepository = EvidencegenericRepository;
-            _EvidenceAuditLoggenericRepository = EvidenceAuditLoggenericRepository;
+            _EvidencegenericRepository = EvidencegenericRepository; 
+            _EvidenceAuditLoggenericRepository = EvidenceAuditLoggenericRepository; 
         }
 
         public async Task<int> CreateTextAsync(int caseId, int addedByUserId, EvidenceCreateDto dto, CancellationToken ct = default)
