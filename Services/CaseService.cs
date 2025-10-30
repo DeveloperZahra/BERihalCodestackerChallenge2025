@@ -23,7 +23,7 @@ namespace BERihalCodestackerChallenge2025.Services
 
             var entity = new Case
             {
-                CaseNumber = $"CASE-{DateTime.UtcNow:yyyy}-{Random.Shared.Next(1, 999999):000000}",
+                CaseNumber = $"CASE-{DateTime.UtcNow:yyyy}-{Random.Shared.Next(1, 999999):000000}", //
                 Name = dto.Name,
                 Description = dto.Description,
                 AreaCity = dto.AreaCity,
@@ -36,12 +36,6 @@ namespace BERihalCodestackerChallenge2025.Services
 
             await _cases.AddAsync(entity, ct);        
             await _uow.SaveChangesAsync(ct);         // 
-
-            if (dto.ReportIds is { Count: > 0 })
-            {
-                await _uow.Cases.LinkReportsAsync(entity.Id, dto.ReportIds, ct); //
-                await _uow.SaveChangesAsync(ct);
-            }
 
             return (entity.Id, entity.CaseNumber);
         }

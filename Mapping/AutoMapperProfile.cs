@@ -26,7 +26,7 @@ namespace BERihalCodestackerChallenge2025.Mapping
             // ========== CASES ==========
             // Create / Update mapping
             CreateMap<CaseCreateDto, Case>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore()) // ID handled by DB
+                .ForMember(dest => dest.CaseId, opt => opt.Ignore()) // ID handled by DB
                 .ForMember(dest => dest.CaseNumber, opt => opt.Ignore()) // auto-generated
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "pending")) // default
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));

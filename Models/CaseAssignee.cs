@@ -9,7 +9,7 @@ namespace BERihalCodestackerChallenge2025.Model
     public class CaseAssignee
     {
         [Key]
-        public int Id { get; set; } // Primary key
+        public int CaseAssigneeId { get; set; } // Primary key
 
         [Required]
         public int CaseId { get; set; } // Foreign key to the case
@@ -30,6 +30,10 @@ namespace BERihalCodestackerChallenge2025.Model
         //
         [Required]
         public CaseStatus ProgressStatus { get; set; } = CaseStatus.pending; // Progress status of the assignee in the case
+
+        [Required]
+        public string ClearanceLevel { get; set; } //Determines the level of access to the case
+
 
         [Required]
         public DateTime AssignedAt { get; set; } = DateTime.UtcNow; // Timestamp of when the user was assigned to the case

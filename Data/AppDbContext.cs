@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.Emit;
 
 
 namespace BERihalCodestackerChallenge2025.Data
@@ -21,6 +22,7 @@ namespace BERihalCodestackerChallenge2025.Data
         public DbSet<CaseParticipant> CaseParticipants => Set<CaseParticipant>(); // DbSet for case-participant links
         public DbSet<Evidence> Evidences => Set<Evidence>(); // DbSet for evidences
         public DbSet<EvidenceAuditLog> EvidenceAuditLogs => Set<EvidenceAuditLog>(); // DbSet for evidence audit logs
+        
 
         protected override void OnModelCreating(ModelBuilder b) // Configure entity relationships and constraints
         {
@@ -42,8 +44,16 @@ namespace BERihalCodestackerChallenge2025.Data
                 .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of users who created cases
 
             b.Entity<CaseAssignee>()
-                .HasOne(a => a.Case).WithMany(c => c.Assignees)
-                .HasForeignKey(a => a.CaseId).OnDelete(DeleteBehavior.Cascade); // Cascade delete assignees when case is deleted
+                .HasOne(ca => ca.Case)
+                .WithMany(c => c.CaseAssignees)
+                .HasForeignKey(ca => ca.CaseId)
+                .OnDelete(DeleteBehavior.Restrict); // Cascade delete assignees when case is deleted
+
+            b.Entity<CaseAssignee>()
+                .HasOne(ca => ca.User)
+                .WithMany(u => u.CaseAssignees)
+                .HasForeignKey(ca => ca.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             b.Entity<CaseReport>()
                 .HasOne(cr => cr.Case).WithMany(c => c.LinkedReports)
@@ -60,6 +70,8 @@ namespace BERihalCodestackerChallenge2025.Data
             b.Entity<EvidenceAuditLog>()
                 .HasOne(a => a.Evidence).WithMany(e => e.Audit)
                 .HasForeignKey(a => a.EvidenceId).OnDelete(DeleteBehavior.NoAction); // Cascade delete audit logs when evidence is deleted
+
+    
         }
     }
 }

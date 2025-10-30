@@ -24,29 +24,7 @@ namespace BERihalCodestackerChallenge2025.Services
             if (!Enum.TryParse<Clearance>(dto.ClearanceLevel, true, out var level))
                 throw new ArgumentException("Invalid clearance level.");
 
-            var user = new User
-            {
-                Username = dto.Username,
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Role = role,
-                ClearanceLevel = level,
-                CreatedAt = DateTime.UtcNow
-            };
 
-            await _users.AddAsync(user, ct);
-            await _uow.SaveChangesAsync(ct);
-
-            return new UserReadDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                Role = user.Role.ToString(),
-                ClearanceLevel = user.ClearanceLevel.ToString(),
-                CreatedAt = user.CreatedAt
-            };
-        }
 
         public async Task<UserReadDto?> GetByIdAsync(int id, CancellationToken ct = default)
         {
@@ -92,7 +70,7 @@ namespace BERihalCodestackerChallenge2025.Services
                        ?? throw new KeyNotFoundException("User not found.");
 
             _users.Delete(user);
-            await _uow.SaveChangesAsync(ct);
+            await _uow.SaveChangesAsync(ct); //
         }
     }
 }

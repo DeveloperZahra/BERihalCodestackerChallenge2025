@@ -40,7 +40,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             if (creator == null)
                 return Unauthorized("Invalid user.");
 
-            newCase.CreatedByUserId = creator.Id;
+            newCase.CreatedByUserId = creator.UserId;
             newCase.CaseNumber = $"CASE-{DateTime.UtcNow:yyyy}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";
 
             _context.Cases.Add(newCase);
@@ -55,7 +55,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
                     {
                         _context.CaseReports.Add(new CaseReport
                         {
-                            CaseId = newCase.Id,
+                            CaseId = newCase.CaseId,
                             ReportId = reportId,
                             LinkedAt = DateTime.UtcNow
                         });
@@ -64,7 +64,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return CreatedAtAction(nameof(GetCaseById), new { id = newCase.Id },
+            return CreatedAtAction(nameof(GetCaseById), new { id = newCase.CaseId },
                 new { newCase.CaseNumber, newCase.Name, newCase.AuthorizationLevel });
         }
 
@@ -123,7 +123,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
                 .Include(c => c.Evidences)
                 .Include(c => c.CaseParticipants)
                 .ThenInclude(cp => cp.Participant)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.CaseId == id);
 
             if (caseEntity == null)
                 return NotFound("Case not found.");

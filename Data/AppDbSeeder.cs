@@ -90,7 +90,7 @@ namespace BERihalCodestackerChallenge2025.Data
                     CaseType = "Robbery", // Case type
                     AuthorizationLevel = Clearance.high, // Required clearance level
                     Status = CaseStatus.ongoing, // Case status
-                    CreatedByUserId = adminUser.Id, // Creator user ID
+                    CreatedByUserId = adminUser.UserId, // Creator user ID
                     CreatedAt = DateTime.UtcNow // Timestamp
                 };
 
@@ -100,7 +100,7 @@ namespace BERihalCodestackerChallenge2025.Data
                 // 
                 var link = new CaseReport // Link case to report
                 {
-                    CaseId = case1.Id, // Case ID
+                    CaseId = case1.CaseId, // Case ID
                     ReportId = report.Id, // Report ID
                     LinkedAt = DateTime.UtcNow // Timestamp
                 };
@@ -115,8 +115,8 @@ namespace BERihalCodestackerChallenge2025.Data
 
                 var assign1 = new CaseAssignee // Case assignee
                 {
-                    CaseId = case1.Id, // Case ID
-                    UserId = investigator.Id, // User ID
+                    CaseId = case1.CaseId, // Case ID
+                    UserId = investigator.UserId, // User ID
                     AssignedRole = "Investigator", // Assigned role
                     ProgressStatus = CaseStatus.ongoing, // Progress status
                     AssignedAt = DateTime.UtcNow // Timestamp
@@ -124,8 +124,8 @@ namespace BERihalCodestackerChallenge2025.Data
 
                 var assign2 = new CaseAssignee // Case assignee
                 {
-                    CaseId = case1.Id, //   Case ID
-                    UserId = officer.Id, // User ID
+                    CaseId = case1.CaseId, //   Case ID
+                    UserId = officer.UserId, // User ID
                     AssignedRole = "Officer", // Assigned role
                     ProgressStatus = CaseStatus.pending, // Progress status
                     AssignedAt = DateTime.UtcNow // Timestamp
@@ -156,19 +156,19 @@ namespace BERihalCodestackerChallenge2025.Data
 
                 var caseSuspect = new CaseParticipant // Case participant - suspect
                 {
-                    CaseId = case1.Id, // Link to case
+                    CaseId = case1.CaseId, // Link to case
                     ParticipantId = suspect.Id, // Link to suspect participant
                     Role = ParticipantRole.Suspect,
-                    AddedByUserId = investigator.Id, // Added by investigator
+                    AddedByUserId = investigator.UserId, // Added by investigator
                     AddedAt = DateTime.UtcNow // Timestamp
                 };
 
                 var caseVictim = new CaseParticipant // Case participant - victim
                 {
-                    CaseId = case1.Id,
+                    CaseId = case1.CaseId,
                     ParticipantId = victim.Id, //   Link to victim participant
                     Role = ParticipantRole.Victim, // Victim role
-                    AddedByUserId = officer.Id, // Added by officer
+                    AddedByUserId = officer.UserId, // Added by officer
                     AddedAt = DateTime.UtcNow // Timestamp
                 };
 
@@ -180,8 +180,8 @@ namespace BERihalCodestackerChallenge2025.Data
                 // ---------------------
                 var evidence = new Evidence
                 {
-                    CaseId = case1.Id, // Link to case
-                    AddedByUserId = investigator.Id,
+                    CaseId = case1.CaseId, // Link to case
+                    AddedByUserId = investigator.UserId,
                     Type = EvidenceType.text, // Evidence type
                     TextContent = "Fingerprint found on victim's car.", // Text evidence
                     IsSoftDeleted = false, // Not deleted
@@ -198,7 +198,7 @@ namespace BERihalCodestackerChallenge2025.Data
                 {
                     EvidenceId = evidence.Id,
                     Action = "add",
-                    ActedByUserId = investigator.Id,
+                    ActedByUserId = investigator.UserId,
                     ActedAt = DateTime.UtcNow,
                     Details = "Initial evidence entry by Investigator." // Details
                 };

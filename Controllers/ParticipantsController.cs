@@ -108,7 +108,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         public async Task<IActionResult> AssignParticipantToCase([FromBody] CaseParticipantCreateDto dto)
         {
             //  Validate case and participant existence
-            var caseExists = await _context.Cases.AnyAsync(c => c.Id == dto.CaseId);
+            var caseExists = await _context.Cases.AnyAsync(c => c.CaseId == dto.CaseId);
             var participantExists = await _context.Participants.AnyAsync(p => p.Id == dto.ParticipantId);
 
             if (!caseExists || !participantExists)
@@ -139,7 +139,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             var addedBy = User?.Identity?.Name;
             var addedUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == addedBy);
             if (addedUser != null)
-                caseParticipant.AddedByUserId = addedUser.Id;
+                caseParticipant.AddedByUserId = addedUser.UserId;
 
             _context.CaseParticipants.Add(caseParticipant);
             await _context.SaveChangesAsync();
