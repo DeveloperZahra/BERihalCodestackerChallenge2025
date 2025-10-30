@@ -37,7 +37,7 @@ namespace BERihalCodestackerChallenge2025.Services
             await _cases.AddAsync(entity, ct);        
             await _uow.SaveChangesAsync(ct);         // 
 
-            return (entity.Id, entity.CaseNumber);
+            return (entity.CaseId, entity.CaseNumber);
         }
 
         // 
