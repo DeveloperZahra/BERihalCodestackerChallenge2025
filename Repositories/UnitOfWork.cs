@@ -19,14 +19,14 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public IEvidenceAuditLogRepository EvidenceAudit { get; } // Evidence audit log repository for managing audit logs
 
         public UnitOfWork( // Constructor accepting all required repositories and the database context
-            AppDbContext db, 
-            IUserRepository users, 
-            ICaseRepository cases,
-            IReportRepository reports,
-            ICaseAssigneeRepository assignees,
-            IParticipantRepository participants,
-            ICaseParticipantRepository caseParticipants,
-            IEvidenceRepository evidence, 
+            AppDbContext db, // Database context
+            IUserRepository users, // User repository
+            ICaseRepository cases, // Case repository
+            IReportRepository reports, // Report repository
+            ICaseAssigneeRepository assignees, // Case assignee repository
+            IParticipantRepository participants, // Participant repository
+            ICaseParticipantRepository caseParticipants, // Case participant repository
+            IEvidenceRepository evidence,  // Evidence repository
             IEvidenceAuditLogRepository evidenceAudit) // Initialize the UnitOfWork with the provided repositories and database context
         {
             _db = db; // Assign the database context

@@ -21,7 +21,7 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required]
         public int ParticipantId { get; set; } // Foreign key to the participant
 
-        [ForeignKey(nameof(ParticipantId))]
+        [ForeignKey(nameof(ParticipantId))] // Navigation property to the participant
         public Participant Participant { get; set; } = default!; // Navigation property to the participant
 
         [Required]
@@ -29,7 +29,7 @@ namespace BERihalCodestackerChallenge2025.Model
 
         public int? AddedByUserId { get; set; } // Foreign key to the user who added the participant
 
-        [ForeignKey(nameof(AddedByUserId))]
+        [ForeignKey(nameof(AddedByUserId))] // Navigation property to the user who added the participant
         public User? AddedByUser { get; set; } // Navigation property to the user who added the participant
 
         [Required]

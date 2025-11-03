@@ -19,7 +19,7 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required]
         public int ReportId { get; set; } // Foreign key to the associated crime report
 
-        [ForeignKey(nameof(ReportId))] 
+        [ForeignKey(nameof(ReportId))] // Navigation property to the associated crime report
         public CrimeReport Report { get; set; } = default!; // Navigation property to the associated crime report
 
         [Required]
