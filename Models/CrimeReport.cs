@@ -31,10 +31,10 @@ namespace BERihalCodestackerChallenge2025.Model
         [ForeignKey(nameof(ReportedByUserId))] // Navigation property to the reporting user
         public User? ReportedByUser { get; set; } // The user who reported the crime
 
-        [Precision(9, 6)] 
+        [Precision(9, 6)]
         public decimal? Latitude { get; set; } // Latitude of the crime location
 
-        [Precision(9, 6)]
+        [Precision(9, 6)] 
         public decimal? Longitude { get; set; } // Longitude of the crime location
 
 

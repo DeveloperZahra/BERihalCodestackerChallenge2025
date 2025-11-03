@@ -1,7 +1,6 @@
 ﻿// Repositories/Implementations/ReportRepository.cs
 using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BERihalCodestackerChallenge2025.Repositories
