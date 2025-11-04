@@ -4,6 +4,7 @@ using BERihalCodestackerChallenge2025.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BERihalCodestackerChallenge2025.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251027104207_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +27,11 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
             modelBuilder.Entity("BERihalCodestackerChallenge2025.Model.Case", b =>
                 {
-                    b.Property<int>("CaseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AreaCity")
                         .IsRequired()
@@ -66,6 +70,7 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.HasKey("Id");
 
                     b.HasIndex("AuthorizationLevel");
 
@@ -81,9 +86,11 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
             modelBuilder.Entity("BERihalCodestackerChallenge2025.Model.CaseAssignee", b =>
                 {
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AssignedAt")
                         .HasColumnType("datetime2");
@@ -96,23 +103,15 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CaseId1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClearanceLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ProgressStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.HasIndex("CaseId", "UserId")
                         .IsUnique();
@@ -137,9 +136,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CaseId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("ParticipantId")
                         .HasColumnType("int");
 
@@ -149,8 +145,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddedByUserId");
-
-                    b.HasIndex("CaseId1");
 
                     b.HasIndex("ParticipantId");
 
@@ -365,9 +359,11 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
             modelBuilder.Entity("BERihalCodestackerChallenge2025.Model.User", b =>
                 {
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ClearanceLevel")
                         .HasColumnType("int");
@@ -397,6 +393,7 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -421,20 +418,16 @@ namespace BERihalCodestackerChallenge2025.Migrations
             modelBuilder.Entity("BERihalCodestackerChallenge2025.Model.CaseAssignee", b =>
                 {
                     b.HasOne("BERihalCodestackerChallenge2025.Model.Case", "Case")
-                        .HasForeignKey("CaseId")
-                        .IsRequired();
-
-                    b.HasOne("BERihalCodestackerChallenge2025.Model.Case", null)
                         .WithMany("Assignees")
-                        .HasForeignKey("CaseId1");
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BERihalCodestackerChallenge2025.Model.User", "User")
-                        .HasForeignKey("UserId")
-                        .IsRequired();
-
-                    b.HasOne("BERihalCodestackerChallenge2025.Model.User", null)
                         .WithMany("CaseAssignments")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Case");
 
@@ -452,10 +445,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         .HasForeignKey("CaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BERihalCodestackerChallenge2025.Model.Case", null)
-                        .WithMany("CaseParticipants")
-                        .HasForeignKey("CaseId1");
 
                     b.HasOne("BERihalCodestackerChallenge2025.Model.Participant", "Participant")
                         .WithMany("CaseLinks")
@@ -540,10 +529,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                 {
                     b.Navigation("Assignees");
 
-                    b.Navigation("CaseAssignees");
-
-                    b.Navigation("CaseParticipants");
-
                     b.Navigation("Evidences");
 
                     b.Navigation("LinkedReports");
@@ -568,8 +553,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
             modelBuilder.Entity("BERihalCodestackerChallenge2025.Model.User", b =>
                 {
-                    b.Navigation("CaseAssignees");
-
                     b.Navigation("CaseAssignments");
 
                     b.Navigation("CreatedCases");

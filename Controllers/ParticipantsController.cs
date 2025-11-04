@@ -27,7 +27,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Add a new participant (suspect/victim/witness)
         // ================================================================
         [HttpPost("CreateParticipant")]
-        public async Task<IActionResult>CreateParticipant([FromBody] ParticipantCreateDto dto)
         {
             //  Map DTO → Model
             var participant = _mapper.Map<Participant>(dto);
@@ -44,7 +43,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [Authorize(Roles = "Admin,Investigator")]
         [HttpGet("GetAllParticipants")]
-        public async Task<ActionResult<IEnumerable<Participant>>>GetAllParticipants()
         {
             var participants = await _context.Participants.AsNoTracking().ToListAsync();
             return Ok(participants);
@@ -54,8 +52,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/participants/{id}
         // Description: Retrieve a specific participant
         // ================================================================
-        [HttpGet("GetParticipantById/{id:int}")]
-        public async Task<ActionResult<Participant>>GetParticipantById(int id)
         {
             var participant = await _context.Participants.FindAsync(id);
             if (participant == null)
@@ -69,7 +65,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Update a participant’s data
         // ================================================================
         [HttpPut("UpdateParticipant/{id:int}")]
-        public async Task<IActionResult>UpdateParticipant(int id, [FromBody] ParticipantCreateDto dto)
         {
             var participant = await _context.Participants.FindAsync(id);
             if (participant == null)
@@ -87,7 +82,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteParticipant/{id:int}")]
-        public async Task<IActionResult>DeleteParticipant(int id)
         {
             var participant = await _context.Participants.FindAsync(id);
             if (participant == null)
@@ -105,7 +99,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [Authorize(Roles = "Admin,Investigator")]
         [HttpPost("AddAssignParticipant")]
-        public async Task<IActionResult>AssignParticipantToCase([FromBody] CaseParticipantCreateDto dto)
         {
             //  Validate case and participant existence
             var caseExists = await _context.Cases.AnyAsync(c => c.CaseId == dto.CaseId);
@@ -153,7 +146,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Get all participants in a specific case
         // ================================================================
         [HttpGet("GetParticipantsByCase/{caseId:int}")]
-        public async Task<ActionResult<IEnumerable<CaseParticipantReadDto>>>GetParticipantsByCase(int caseId)
         {
             var caseParticipants = await _context.CaseParticipants
                 .Include(cp => cp.Participant)

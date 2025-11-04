@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer; 
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.Mapping;
 using BERihalCodestackerChallenge2025.Repositories;
@@ -52,8 +49,6 @@ namespace BERihalCodestackerChallenge2025
 
 
             builder.Services.AddControllers();
-
-            // Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

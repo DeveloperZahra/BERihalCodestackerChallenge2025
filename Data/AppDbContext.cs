@@ -13,16 +13,7 @@ namespace BERihalCodestackerChallenge2025.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)  : base(options) { } // Constructor accepting DbContext options
 
-        public DbSet<User> Users { get; set; } // DbSet for users
-        public DbSet<CrimeReport> CrimeReports { get; set; } // DbSet for crime reports
-        public DbSet<Case> Cases { get; set; } // DbSet for cases
-        public DbSet<CaseReport> CaseReports { get; set; } // DbSet for case-report links
-        public DbSet<CaseAssignee> CaseAssignees { get; set; } // DbSet for case assignees
-        public DbSet<Participant> Participants { get; set; } // DbSet for participants
-        public DbSet<CaseParticipant> CaseParticipants { get; set; } // DbSet for case-participant links
-        public DbSet<Evidence> Evidences { get; set; } // DbSet for evidences
-        public DbSet<EvidenceAuditLog> EvidenceAuditLogs { get; set; } // DbSet for evidence audit logs
-
+        
 
         protected override void OnModelCreating(ModelBuilder b) // Configure entity relationships and constraints
         {

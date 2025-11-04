@@ -13,35 +13,32 @@ namespace BERihalCodestackerChallenge2025.Controllers
     [Route("api/[controller]")]
     public class CrimeReportsController : ControllerBase
     {
-        private readonly ReportService _reportService;
-        public CrimeReportsController(ReportService reportService) 
         {
-            
-            _reportService = reportService;
-
         }
 
         // ================================================================
         // POST: api/crimereports/public
         // Description: Allow citizens to submit crime reports anonymously.
         // ================================================================
-
         [AllowAnonymous] // Citizens can submit reports without authentication
         [HttpPost("CreateCrimeReport")]
 
         public async Task<IActionResult> SubmitCrimeReport([FromBody] CrimeReportCreateDto dto)
         {
-            if (dto == null)
-                return BadRequest("Invalid report data.");
 
-            var createdReport = await _reportService.SubmitAsync(dto);
+
+            report.ReportDateTime = DateTime.UtcNow;
+
+            // Generate tracking code after save
+            _context.CrimeReports.Add(report);
+            await _context.SaveChangesAsync();
+
+            report.TrackingCode = $"CR-{DateTime.UtcNow:yyyy}-{report.Id:D6}";
+            await _context.SaveChangesAsync();
 
             return Ok(new
             {
                 message = "Crime report submitted successfully.",
-                reportId = createdReport.Id,
-                trackingCode = createdReport.TrackingCode,
-                status = createdReport.Status
             });
         }
 
@@ -49,15 +46,12 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/crimereports/track/{code}
         // Description: Citizens can track report status using tracking code.
         // ================================================================
-        [HttpGet("TrackCrimeReport/{code}")]
         [AllowAnonymous]
         public async Task<IActionResult> TrackReportByCode(string code)
         {
-            var report = await _reportService.GetStatusAsync(code);
             if (report == null)
                 return NotFound("No report found with this tracking code.");
 
-            return Ok(report);
         }
 
 
@@ -67,10 +61,13 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetAllCrimeReports")]
         [Authorize(Roles = "Admin, Investigator")]
-        public IActionResult GetAllReports()
         {
-           
-            return BadRequest("Operation not supported yet.");
+            var reports = await _context.CrimeReports
+                .Include(r => r.ReportedByUser)
+                .AsNoTracking()
+                .OrderByDescending(r => r.ReportDateTime)
+                .ToListAsync();
+
         }
 
         // ================================================================
@@ -79,13 +76,10 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetCrimeReportById/{id:int}")]
         [Authorize(Roles = "Admin, Investigator")]
-        public async Task<IActionResult> GetCrimeReportById(int id)
         {
-            var report = await _reportService.GetStatusAsync(id.ToString());
             if (report == null)
                 return NotFound("Report not found.");
 
-            return Ok(report);
         }
 
         // ================================================================
@@ -96,8 +90,14 @@ namespace BERihalCodestackerChallenge2025.Controllers
         [Authorize(Roles = "Admin, Investigator")]
         public async Task<IActionResult> UpdateReportStatus(int id, [FromBody] string status)
         {
-           
-            return BadRequest("Update status feature not implemented yet in ReportService.");
+            var report = await _context.CrimeReports.FindAsync(id);
+            if (report == null)
+                return NotFound("Report not found.");
+
+            report.Status = ReportStatus.resolved;
+            
+            await _context.SaveChangesAsync();
+
         }
     }
 }

@@ -50,9 +50,6 @@ namespace BERihalCodestackerChallenge2025.Services
                 CreatedAt = user.CreatedAt
             };
         }
-        // ============================================================
-        // Get user by Id
-        // ============================================================
         public async Task<UserReadDto?> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var u = await _users.GetByIdAsync(id, ct);
@@ -60,7 +57,6 @@ namespace BERihalCodestackerChallenge2025.Services
 
             return new UserReadDto
             {
-                Id = u.UserId,
                 Username = u.Username,
                 Email = u.Email,
                 Role = u.Role.ToString(),
@@ -120,9 +116,6 @@ namespace BERihalCodestackerChallenge2025.Services
             _users.Update(user);
             await _uow.SaveChangesAsync(ct);
         }
-        // ============================================================
-        // Delete existing user
-        // ============================================================
         public async Task DeleteAsync(int id, CancellationToken ct = default)
         {
             var user = await _users.GetByIdAsync(id, ct)

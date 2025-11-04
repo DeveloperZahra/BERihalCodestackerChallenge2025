@@ -14,11 +14,8 @@ namespace BERihalCodestackerChallenge2025.Controllers
     [Authorize] //  Admin, Investigator, Officer (roles checked per-action)
     public class CasesController : ControllerBase
     {
-        private readonly CaseService _caseService;
 
-        public CasesController(CaseService caseService)
         {
-            _caseService = caseService;
         }
 
         // ================================================================
@@ -29,39 +26,20 @@ namespace BERihalCodestackerChallenge2025.Controllers
         [Authorize(Roles = "Admin,Investigator")]
         public async Task<IActionResult> CreateCase([FromBody] CaseCreateDto dto)
         {
-            if (dto == null)
-                return BadRequest("Invalid input data.");
 
-            
             var username = User.Identity?.Name;
-            if (string.IsNullOrEmpty(username))
-                return Unauthorized("User identity not found.");
 
-          
-            int createdByUserId = 1; 
+            newCase.CreatedByUserId = creator.UserId;
+            newCase.CaseNumber = $"CASE-{DateTime.UtcNow:yyyy}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";
 
-            var (caseId, caseNumber) = await _caseService.CreateAsync(createdByUserId, dto);
 
-            return CreatedAtAction(nameof(GetCaseById),
-                new { id = caseId },
-                new
-                {
-                    Message = "Case created successfully.",
-                    CaseId = caseId,
-                    CaseNumber = caseNumber
-                });
-        }
+            {
+                        });
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
 
-        // ================================================================
-        // GET: api/cases/GetCaseById/{id}
-        // Description: Retrieve case by ID (for Admin, Investigator, Officer)
-        // ================================================================
-        [HttpGet("GetCaseById/{id:int}")]
-        [Authorize(Roles = "Admin,Investigator,Officer")]
-        public async Task<IActionResult> GetCaseById(int id)
-        {
-            
-            return BadRequest("Get by ID is not yet implemented in CaseService.");
         }
 
         // ================================================================
@@ -72,8 +50,10 @@ namespace BERihalCodestackerChallenge2025.Controllers
         [Authorize(Roles = "Admin,Investigator")]
         public async Task<IActionResult> UpdateCase(int id, [FromBody] CaseUpdateDto dto)
         {
-           
-            return BadRequest("Update case feature not implemented yet in CaseService.");
+            var existingCase = await _context.Cases.FindAsync(id);
+            if (existingCase == null)
+                return NotFound("Case not found.");
+
         }
 
 
@@ -83,12 +63,50 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetAllCases")]
         [Authorize(Roles = "Admin,Investigator,Officer")]
-        public async Task<IActionResult> GetAllCases()
         {
-            
-            return BadRequest("Get all cases not implemented yet in CaseService.");
+            var query = _context.Cases
+                .Include(c => c.CreatedByUser)
+                .AsQueryable();
+
         }
 
+        //// ================================================================
+        //// GET: api/cases/{id}/assignees
+        //// Description: List all assigned officers/investigators
+        //// ================================================================
+        //[HttpGet("{id:int}/assignees")]
+        //[Authorize(Roles = "Admin,Investigator,Officer")]
+        //public async Task<IActionResult> GetCaseAssignees(int id)
+        //{
+        //    var assignees = await _context.CaseAssignees
+        //        .Include(a => a.User)
+        //        .Where(a => a.CaseId == id)
+        //        .ToListAsync();
+
+        //    if (!assignees.Any())
+        //        return NotFound("No assignees found for this case.");
+
+        //    return Ok(_mapper.Map<IEnumerable<CaseAssigneeDto>>(assignees));
+        //}
+
+        // ================================================================
+        // GET: api/cases/{id}/evidence
+        // Description: List all evidence for this case
+        // ================================================================
+        [HttpGet("GetCaseEvidences/{id:int}")]
+        [Authorize(Roles = "Admin,Investigator,Officer")]
+        public async Task<IActionResult> GetCaseEvidences(int id)
+        {
+            var evidences = await _context.Evidences
+                .Include(e => e.AddedByUser)
+                .Where(e => e.CaseId == id && !e.IsSoftDeleted)
+                .ToListAsync();
+
+            if (!evidences.Any())
+                return NotFound("No evidence found for this case.");
+
+            return Ok(_mapper.Map<IEnumerable<EvidenceReadDto>>(evidences));
+        }
 
         // ================================================================
         // DELETE: api/cases/{id}
@@ -98,8 +116,13 @@ namespace BERihalCodestackerChallenge2025.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCase(int id)
         {
-            
-            return BadRequest("Delete case feature not implemented yet in CaseService.");
+            var existingCase = await _context.Cases.FindAsync(id);
+            if (existingCase == null)
+                return NotFound("Case not found.");
+
+            _context.Cases.Remove(existingCase);
+            await _context.SaveChangesAsync();
+
         }
     }
 }
