@@ -69,8 +69,10 @@ namespace BERihalCodestackerChallenge2025.Controllers
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _config.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var key = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key is missing in configuration.");
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
 
             var claims = new[]
             {

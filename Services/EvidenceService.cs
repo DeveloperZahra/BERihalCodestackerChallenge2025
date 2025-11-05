@@ -5,7 +5,7 @@ using BERihalCodestackerChallenge2025.Repositories;
 
 namespace BERihalCodestackerChallenge2025.Services
 {
-    public class EvidenceService
+    public class EvidenceService : IEvidenceService
     {
         private readonly IUnitOfWork _uow;
         private readonly IGenericRepository<Evidence> _EvidencegenericRepository;
