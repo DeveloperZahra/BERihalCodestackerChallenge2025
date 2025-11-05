@@ -51,7 +51,7 @@ namespace BERihalCodestackerChallenge2025.Mapping
 
 
             // ========== PARTICIPANTS ==========
-            CreateMap<Participant, ParticipantCreateDto>().ReverseMap();
+            CreateMap<Participant, ParticipantDto>().ReverseMap();
 
             CreateMap<CaseParticipant, CaseParticipantReadDto>()
                 .ForMember(dest => dest.ParticipantId, opt => opt.MapFrom(src => src.ParticipantId))
