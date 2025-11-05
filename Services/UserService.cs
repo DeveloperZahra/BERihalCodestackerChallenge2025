@@ -17,6 +17,9 @@ namespace BERihalCodestackerChallenge2025.Services
             _users = usersRepo;
         }
 
+        // ============================================================
+        // Create new user
+        // ============================================================
         public async Task<UserReadDto> CreateAsync(UserCreateUpdateDto dto, CancellationToken ct = default)
         {
             if (!Enum.TryParse<Role>(dto.Role, true, out var role))
@@ -39,7 +42,7 @@ namespace BERihalCodestackerChallenge2025.Services
 
             return new UserReadDto
             {
-                Id = user.Id,
+                Id = user.UserId,
                 Username = user.Username,
                 Email = user.Email,
                 Role = user.Role.ToString(),
@@ -47,7 +50,6 @@ namespace BERihalCodestackerChallenge2025.Services
                 CreatedAt = user.CreatedAt
             };
         }
-
         public async Task<UserReadDto?> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var u = await _users.GetByIdAsync(id, ct);
@@ -55,7 +57,6 @@ namespace BERihalCodestackerChallenge2025.Services
 
             return new UserReadDto
             {
-                Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
                 Role = u.Role.ToString(),
@@ -64,6 +65,36 @@ namespace BERihalCodestackerChallenge2025.Services
             };
         }
 
+        // ============================================================
+        // Get all users
+        // ============================================================
+        public async Task<IEnumerable<UserReadDto>> GetAllAsync(CancellationToken ct = default)
+        {
+            var allUsers = await _users.GetAllAsync(ct);
+            return allUsers.Select(u => new UserReadDto
+            {
+                Id = u.UserId,
+                Username = u.Username,
+                Email = u.Email,
+                Role = u.Role.ToString(),
+                ClearanceLevel = u.ClearanceLevel.ToString(),
+                CreatedAt = u.CreatedAt
+            });
+        }
+
+        // ============================================================
+        // Check if username or email already exists
+        // ============================================================
+        public async Task<bool> ExistsByUsernameOrEmailAsync(string username, string email, CancellationToken ct = default)
+        {
+            var users = await _users.GetAllAsync(ct);
+            var exists = users.Any(u => u.Username == username || u.Email == email);
+            return exists;
+        }
+
+        // ============================================================
+        // Update existing user
+        // ============================================================
         public async Task UpdateAsync(int id, UserCreateUpdateDto dto, CancellationToken ct = default)
         {
             var user = await _users.GetByIdAsync(id, ct)
@@ -85,7 +116,6 @@ namespace BERihalCodestackerChallenge2025.Services
             _users.Update(user);
             await _uow.SaveChangesAsync(ct);
         }
-
         public async Task DeleteAsync(int id, CancellationToken ct = default)
         {
             var user = await _users.GetByIdAsync(id, ct)

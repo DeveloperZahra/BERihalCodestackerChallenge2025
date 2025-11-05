@@ -12,6 +12,8 @@ namespace BERihalCodestackerChallenge2025.DTOs
         public string? MimeType { get; set; }
         public long? SizeBytes { get; set; }
         public string? Remarks { get; set; }
+
+        public int AddedByUserId { get; set; }
     }
 
     // Dto for Evidence Read 

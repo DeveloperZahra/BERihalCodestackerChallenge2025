@@ -2,6 +2,7 @@
 using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.DTOs;
 using BERihalCodestackerChallenge2025.Model;
+using BERihalCodestackerChallenge2025.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,32 +10,22 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("")]
+    [Route("api/[controller]")]
     public class CrimeReportsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
-
-        public CrimeReportsController(AppDbContext context, IMapper mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
         // ================================================================
         // POST: api/crimereports/public
         // Description: Allow citizens to submit crime reports anonymously.
         // ================================================================
-        [HttpPost("CreateCrimeReport")]
         [AllowAnonymous] // Citizens can submit reports without authentication
+        [HttpPost("CreateCrimeReport")]
+
         public async Task<IActionResult> SubmitCrimeReport([FromBody] CrimeReportCreateDto dto)
         {
-            // Map DTO to Model
-            var report = _mapper.Map<CrimeReport>(dto);
 
-            // Citizen reports anonymously (no user linked)
-            report.ReportedByUserId = null;
-            report.Status = ReportStatus.pending;
 
             report.ReportDateTime = DateTime.UtcNow;
 
@@ -48,8 +39,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
             return Ok(new
             {
                 message = "Crime report submitted successfully.",
-                reportId = report.Id,
-                trackingCode = report.TrackingCode
             });
         }
 
@@ -57,27 +46,14 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/crimereports/track/{code}
         // Description: Citizens can track report status using tracking code.
         // ================================================================
-        [HttpGet("TrackCrimeReport/{reportId}")]
         [AllowAnonymous]
         public async Task<IActionResult> TrackReportByCode(string code)
         {
-            var report = await _context.CrimeReports
-                .AsNoTracking()
-                .FirstOrDefaultAsync(r => r.TrackingCode == code);
-
             if (report == null)
                 return NotFound("No report found with this tracking code.");
 
-            return Ok(new
-            {
-                reportId = report.Id,
-                trackingCode = report.TrackingCode,
-                status = report.Status,
-                area = report.AreaCity,
-                description = report.Description,
-                reportedAt = report.ReportDateTime
-            });
         }
+
 
         // ================================================================
         // GET: api/crimereports
@@ -85,7 +61,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetAllCrimeReports")]
         [Authorize(Roles = "Admin, Investigator")]
-        public async Task<ActionResult<IEnumerable<CrimeReportStatusDto>>> GetAllReports()
         {
             var reports = await _context.CrimeReports
                 .Include(r => r.ReportedByUser)
@@ -93,7 +68,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
                 .OrderByDescending(r => r.ReportDateTime)
                 .ToListAsync();
 
-            return Ok(_mapper.Map<IEnumerable<CrimeReportStatusDto>>(reports));
         }
 
         // ================================================================
@@ -102,16 +76,10 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetCrimeReportById/{id:int}")]
         [Authorize(Roles = "Admin, Investigator")]
-        public async Task<ActionResult<CrimeReportStatusDto>> GetReportById(int id)
         {
-            var report = await _context.CrimeReports
-                .Include(r => r.ReportedByUser)
-                .FirstOrDefaultAsync(r => r.Id == id);
-
             if (report == null)
                 return NotFound("Report not found.");
 
-            return Ok(_mapper.Map<CrimeReportStatusDto>(report));
         }
 
         // ================================================================
@@ -130,7 +98,6 @@ namespace BERihalCodestackerChallenge2025.Controllers
             
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = $"Status updated to '{status}'." });
         }
     }
 }

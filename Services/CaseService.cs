@@ -40,7 +40,7 @@ namespace BERihalCodestackerChallenge2025.Services
             return (entity.CaseId, entity.CaseNumber);
         }
 
-        // 
+         
     }
 }
 

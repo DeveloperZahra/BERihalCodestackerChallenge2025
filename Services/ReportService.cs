@@ -22,6 +22,7 @@ namespace BERihalCodestackerChallenge2025.Services
             _users = usersRepo; 
         }
 
+
         public async Task<CrimeReportStatusDto> SubmitAsync(CrimeReportCreateDto dto, CancellationToken ct = default) // Submit a new crime report
         {
             
@@ -62,6 +63,7 @@ namespace BERihalCodestackerChallenge2025.Services
                 ReportDateTime = entity.ReportDateTime // Timestamp of when the report was created
             };
         }
+
 
         public async Task<CrimeReportStatusDto?> GetStatusAsync(string idOrTracking, CancellationToken ct = default) // Retrieve the status of a crime report by ID or tracking code
         {

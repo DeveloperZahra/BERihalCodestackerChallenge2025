@@ -11,17 +11,8 @@ namespace BERihalCodestackerChallenge2025.Data
     // ---------------------------
     public class AppDbContext : DbContext // Represents the application's database context
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { } // Constructor accepting DbContext options
+        public AppDbContext(DbContextOptions<AppDbContext> options)  : base(options) { } // Constructor accepting DbContext options
 
-        public DbSet<User> Users => Set<User>(); // DbSet for users
-        public DbSet<CrimeReport> CrimeReports => Set<CrimeReport>(); // DbSet for crime reports
-        public DbSet<Case> Cases => Set<Case>(); // DbSet for cases
-        public DbSet<CaseReport> CaseReports => Set<CaseReport>(); // DbSet for case-report links
-        public DbSet<CaseAssignee> CaseAssignees => Set<CaseAssignee>(); // DbSet for case assignees
-        public DbSet<Participant> Participants => Set<Participant>(); // DbSet for participants
-        public DbSet<CaseParticipant> CaseParticipants => Set<CaseParticipant>(); // DbSet for case-participant links
-        public DbSet<Evidence> Evidences => Set<Evidence>(); // DbSet for evidences
-        public DbSet<EvidenceAuditLog> EvidenceAuditLogs => Set<EvidenceAuditLog>(); // DbSet for evidence audit logs
         
 
         protected override void OnModelCreating(ModelBuilder b) // Configure entity relationships and constraints

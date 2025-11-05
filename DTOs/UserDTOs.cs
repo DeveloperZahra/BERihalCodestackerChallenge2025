@@ -22,4 +22,19 @@
         public string ClearanceLevel { get; set; }
         public DateTime CreatedAt { get; set; }
     }
+    public class UserRegisterDto
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Role { get; set; } = "Investigator";
+        public string ClearanceLevel { get; set; } = "low";
+    }
+
+    public class UserLoginDto
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+
 }

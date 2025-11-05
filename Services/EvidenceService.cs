@@ -5,7 +5,7 @@ using BERihalCodestackerChallenge2025.Repositories;
 
 namespace BERihalCodestackerChallenge2025.Services
 {
-    public class EvidenceService 
+    public class EvidenceService : IEvidenceService
     {
         private readonly IUnitOfWork _uow;
         private readonly IGenericRepository<Evidence> _EvidencegenericRepository;
@@ -17,7 +17,6 @@ namespace BERihalCodestackerChallenge2025.Services
         
         private static readonly Dictionary<(int evidenceId, int userId), string> PendingHardDeletes = new();
 
-        public EvidenceService(IUnitOfWork uow, IGenericRepository<Evidence> EvidencegenericRepository , IGenericRepository<EvidenceAuditLog> EvidenceAuditLoggenericRepository) {
             _uow = uow; 
 
             _EvidencegenericRepository = EvidencegenericRepository; 

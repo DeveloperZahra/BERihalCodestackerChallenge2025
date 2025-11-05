@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BERihalCodestackerChallenge2025.Controllers
 {
     [ApiController]
-    [Route("")]
+    [Route("api/[controller]")]
     [Authorize(Roles = "Admin,Investigator")]
     public class CaseAssigneesController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // POST: api/CaseAssignees/AssignUserToCase
         // Description: Assign a user to a specific case
         // ======================================================
-        [HttpPost("assign")]
+        [HttpPost("AssignUser")]
         public IActionResult AssignUserToCase([FromBody] CaseAssigneeCreateDto dto)
         {
             //  Step 1: Validate input
@@ -60,7 +60,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             _context.CaseAssignees.Add(assignment);
             _context.SaveChanges();
 
-            //  Step 6: Return success response (⚠️ notice variable inside same scope)
+            //  Step 6: Return success response ( notice variable inside same scope)
             return Ok(new
             {
                 Message = "User assigned successfully to case.",
@@ -101,7 +101,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
       // ================================================================
         [Authorize(Roles = "Officer,Investigator,Admin")]
             [HttpPut("UpdateCaseProgress/{assigneeId:int}")]
-            public async Task<IActionResult> UpdateProgressStatus(int assigneeId, [FromBody] CaseProgressUpdateDto dto)
+            public async Task<IActionResult>UpdateProgressStatus(int assigneeId, [FromBody] CaseProgressUpdateDto dto)
             {
                 var assignee = await _context.CaseAssignees
                     .Include(a => a.Case)
@@ -124,7 +124,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             // Description: Remove an assignee from a case (Admin/Investigator)
             // ================================================================
             [HttpDelete("DeleteAssignee/{id:int}")]
-            public async Task<IActionResult> RemoveAssignee(int id)
+            public async Task<IActionResult>RemoveAssignee(int id)
             {
                 var assignee = await _context.CaseAssignees.FindAsync(id);
                 if (assignee == null)
