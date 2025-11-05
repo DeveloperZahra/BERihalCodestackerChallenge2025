@@ -5,6 +5,9 @@ using BERihalCodestackerChallenge2025.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BERihalCodestackerChallenge2025
 {

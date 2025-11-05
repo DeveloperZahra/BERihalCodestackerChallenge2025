@@ -10,7 +10,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public ParticipantRepository(AppDbContext db) : base(db) { } // Constructor accepting the database context
 
         public Task<Participant?> GetByNameAsync(string fullName, CancellationToken ct = default) // Retrieve a participant by their full name
-            => _db.Participants.AsNoTracking().FirstOrDefaultAsync(p => p.FullName == fullName, ct); // Find the participant by full name
+            => _db.Participants.AsNoTracking().FirstOrDefaultAsync(p => p.Name == fullName, ct); // Find the participant by full name
     }
 }
 

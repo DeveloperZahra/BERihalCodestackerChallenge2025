@@ -1,11 +1,14 @@
 ﻿namespace BERihalCodestackerChallenge2025.DTOs
 {
-    // Dto for participant create 
-    public class ParticipantCreateDto
+    // Dto for participant Read 
+    public class ParticipantReadDto
     {
-        public string FullName { get; set; }
-        public string Phone { get; set; }
-        public string? Notes { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
     }
 
     // Dto for Case Participant Create
@@ -28,6 +31,14 @@
         public string Role { get; set; }
         public string? AddedBy { get; set; }
         public DateTime AddedAt { get; set; }
+    }
+
+    public class ParticipantCreateUpdateDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
     }
 
 }

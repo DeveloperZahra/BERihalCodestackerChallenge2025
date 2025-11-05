@@ -139,16 +139,16 @@ namespace BERihalCodestackerChallenge2025.Data
                 // ---------------------
                 var suspect = new Participant
                 {
-                    FullName = "John Doe", // Suspect name
+                    Name = "John Doe", // Suspect name
                     Phone = "987654321", // Suspect phone
-                    Notes = "Main suspect seen near the crime scene." // Notes
+                    Role = "Main suspect seen near the crime scene." // Role
                 };
 
                 var victim = new Participant // Victim participant
                 {
-                    FullName = "Jane Smith", // Victim name
+                    Name = "Jane Smith", // Victim name
                     Phone = "912345678", // Victim phone
-                    Notes = "Victim reported missing wallet and phone." // Notes
+                    Role = "Victim reported missing wallet and phone." // Role
                 };
 
                 context.Participants.AddRange(suspect, victim); // Add participants to context

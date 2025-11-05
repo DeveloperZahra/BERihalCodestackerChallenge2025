@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BERihalCodestackerChallenge2025.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,12 @@ namespace BERihalCodestackerChallenge2025.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: true),
-                    Notes = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -379,11 +382,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                 name: "IX_Evidences_CaseId_IsSoftDeleted",
                 table: "Evidences",
                 columns: new[] { "CaseId", "IsSoftDeleted" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Participants_FullName",
-                table: "Participants",
-                column: "FullName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

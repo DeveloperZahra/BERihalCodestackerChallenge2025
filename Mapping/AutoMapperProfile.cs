@@ -51,11 +51,11 @@ namespace BERihalCodestackerChallenge2025.Mapping
 
 
             // ========== PARTICIPANTS ==========
-            CreateMap<Participant, ParticipantCreateDto>().ReverseMap();
+            CreateMap<Participant, ParticipantCreateUpdateDto>().ReverseMap();
 
             CreateMap<CaseParticipant, CaseParticipantReadDto>()
                 .ForMember(dest => dest.ParticipantId, opt => opt.MapFrom(src => src.ParticipantId))
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Participant.FullName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Participant.Name))
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Participant.Phone))
                 .ForMember(dest => dest.AddedBy, opt => opt.MapFrom(src =>
                     src.AddedByUser != null ? src.AddedByUser.FullName : "System"));

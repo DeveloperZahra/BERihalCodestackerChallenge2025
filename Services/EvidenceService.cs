@@ -14,13 +14,15 @@ namespace BERihalCodestackerChallenge2025.Services
 
         private static readonly Regex ImageMime = new(@"^image\/[a-z0-9.+-]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        
+
         private static readonly Dictionary<(int evidenceId, int userId), string> PendingHardDeletes = new();
 
-            _uow = uow; 
+        public EvidenceService(IUnitOfWork uow, IGenericRepository<Evidence> EvidencegenericRepository, IGenericRepository<EvidenceAuditLog> EvidenceAuditLoggenericRepository)
+        {
+            _uow = uow;
 
-            _EvidencegenericRepository = EvidencegenericRepository; 
-            _EvidenceAuditLoggenericRepository = EvidenceAuditLoggenericRepository; 
+            _EvidencegenericRepository = EvidencegenericRepository;
+            _EvidenceAuditLoggenericRepository = EvidenceAuditLoggenericRepository;
         }
 
         public async Task<int> CreateTextAsync(int caseId, int addedByUserId, EvidenceCreateDto dto, CancellationToken ct = default)
@@ -126,7 +128,7 @@ namespace BERihalCodestackerChallenge2025.Services
             if (e is null || e.Type != EvidenceType.image || string.IsNullOrWhiteSpace(e.FileUrl) || string.IsNullOrWhiteSpace(e.MimeType))
                 return null;
 
-            
+
             return (Array.Empty<byte>(), e.MimeType);
         }
 
@@ -152,7 +154,7 @@ namespace BERihalCodestackerChallenge2025.Services
             await _uow.SaveChangesAsync(ct);
         }
 
-        
+
 
         public async Task SoftDeleteAsync(int id, int actedByUserId, string? reason = null, CancellationToken ct = default)
         {

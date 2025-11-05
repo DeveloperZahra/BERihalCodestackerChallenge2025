@@ -1,26 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BERihalCodestackerChallenge2025.Model
 {
-   
-    // Participants (people, not system users)
-    
-    [Index(nameof(FullName))] // Index on FullName for faster searches
+    [Table("Participants")]
     public class Participant
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; } // Primary Key
 
-        [Required, MaxLength(160)]
-        public string FullName { get; set; } = default!;
+        [Required, StringLength(100)]
+        public string Name { get; set; } = string.Empty; // Participant full name
 
-        [MaxLength(32), Phone]
-        public string? Phone { get; set; }
+        [Required, EmailAddress]
+        public string Email { get; set; } = string.Empty; // Participant email
 
-        [MaxLength(1024)]
-        public string? Notes { get; set; }
+        [StringLength(20)]
+        public string Phone { get; set; } = string.Empty; // Participant phone number
 
-        public ICollection<CaseParticipant>? CaseLinks { get; set; }
+        [Required, StringLength(50)]
+        public string Role { get; set; } = string.Empty; // Participant role (e.g., Witness, Suspect, Victim, etc.)
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Creation timestamp
+        public DateTime? UpdatedAt { get; set; } // Last updated timestamp
     }
 }
