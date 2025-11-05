@@ -14,69 +14,98 @@ namespace BERihalCodestackerChallenge2025.Controllers
     [Authorize(Roles = "Admin")] // Only Admin can manage users
     public class UsersController : ControllerBase
     {
-        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
+        public UsersController(IUserService userService)
         {
-            _mapper = mapper;
+            _userService = userService;
         }
 
         // ================================================================
         // Description: Create a new user (Admin only)
         // ================================================================
         [HttpPost("CreateUser")]
-        public async Task<IActionResult> CreateUser([FromBody] UserCreateUpdateDto dto)
+        public async Task<IActionResult> CreateUser([FromBody] UserCreateUpdateDto dto, CancellationToken ct)
         {
-            // Validate if username or email already exists
+            
+            var exists = await _userService.ExistsByUsernameOrEmailAsync(dto.Username, dto.Email, ct);
+            if (exists)
                 return Conflict("Username or Email already exists.");
 
-
-
+            try
+            {
+                var created = await _userService.CreateAsync(dto, ct);
+             
+                return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // ================================================================
+        // GET: api/users/GetAllUsers
         // Description: Retrieve all users
         // ================================================================
         [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers(CancellationToken ct)
         {
+            var users = await _userService.GetAllAsync(ct);
+            return Ok(users);
         }
 
         // ================================================================
+        // GET: api/users/GetUserById/{id}
         // Description: Retrieve a single user by ID
         // ================================================================
         [HttpGet("GetUserById/{id:int}")]
-        public async Task<ActionResult<UserReadDto>> GetUserById(int id)
+        public async Task<ActionResult<UserReadDto>> GetUserById(int id, CancellationToken ct)
         {
-            if (user == null)
+            var user = await _userService.GetByIdAsync(id, ct);
+            if (user is null)
                 return NotFound("User not found.");
+            return Ok(user);
         }
 
         // ================================================================
+        // PUT: api/users/UpdateUser/{id}
         // Description: Update user details (Admin only)
         // ================================================================
         [HttpPut("UpdateUser/{id:int}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserCreateUpdateDto dto)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserCreateUpdateDto dto, CancellationToken ct)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
+            {
+                await _userService.UpdateAsync(id, dto, ct);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
                 return NotFound("User not found.");
-
-            //  Map updated fields
-            _mapper.Map(dto, user);
-
-            //  Update password if provided
-            if (!string.IsNullOrWhiteSpace(dto.Password))
-                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
-            return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // ================================================================
+        // DELETE: api/users/DeleteUser/{id}
         // Description: Delete a user (Admin only)
         // ================================================================
         [HttpDelete("DeleteUser/{id:int}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id, CancellationToken ct)
         {
-            return Ok($"User with ID {id} deleted successfully.");
+            try
+            {
+                await _userService.DeleteAsync(id, ct);
+                return Ok($"User with ID {id} deleted successfully.");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("User not found.");
+            }
         }
     }
 }
