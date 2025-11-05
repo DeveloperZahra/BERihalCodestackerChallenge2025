@@ -13,7 +13,11 @@ namespace BERihalCodestackerChallenge2025.Controllers
     [Route("api/[controller]")]
     public class CrimeReportsController : ControllerBase
     {
+        private readonly ReportService _reportService;
+
+        public CrimeReportsController(ReportService reportService)
         {
+            _reportService = reportService;
         }
 
         // ================================================================
@@ -25,20 +29,17 @@ namespace BERihalCodestackerChallenge2025.Controllers
 
         public async Task<IActionResult> SubmitCrimeReport([FromBody] CrimeReportCreateDto dto)
         {
+            if (dto == null)
+                return BadRequest("Invalid report data.");
 
-
-            report.ReportDateTime = DateTime.UtcNow;
-
-            // Generate tracking code after save
-            _context.CrimeReports.Add(report);
-            await _context.SaveChangesAsync();
-
-            report.TrackingCode = $"CR-{DateTime.UtcNow:yyyy}-{report.Id:D6}";
-            await _context.SaveChangesAsync();
+            var createdReport = await _reportService.SubmitAsync(dto);
 
             return Ok(new
             {
                 message = "Crime report submitted successfully.",
+                reportId = createdReport.Id,
+                trackingCode = createdReport.TrackingCode,
+                status = createdReport.Status
             });
         }
 
@@ -46,14 +47,16 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // GET: api/crimereports/track/{code}
         // Description: Citizens can track report status using tracking code.
         // ================================================================
+        [HttpGet("TrackCrimeReport/{code}")]
         [AllowAnonymous]
         public async Task<IActionResult> TrackReportByCode(string code)
         {
+            var report = await _reportService.GetStatusAsync(code);
             if (report == null)
                 return NotFound("No report found with this tracking code.");
 
+            return Ok(report);
         }
-
 
         // ================================================================
         // GET: api/crimereports
@@ -61,13 +64,10 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetAllCrimeReports")]
         [Authorize(Roles = "Admin, Investigator")]
+        public IActionResult GetAllReports()
         {
-            var reports = await _context.CrimeReports
-                .Include(r => r.ReportedByUser)
-                .AsNoTracking()
-                .OrderByDescending(r => r.ReportDateTime)
-                .ToListAsync();
-
+         
+            return BadRequest("Operation not supported yet.");
         }
 
         // ================================================================
@@ -76,10 +76,13 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetCrimeReportById/{id:int}")]
         [Authorize(Roles = "Admin, Investigator")]
+        public async Task<IActionResult> GetCrimeReportById(int id)
         {
+            var report = await _reportService.GetStatusAsync(id.ToString());
             if (report == null)
                 return NotFound("Report not found.");
 
+            return Ok(report);
         }
 
         // ================================================================
@@ -90,14 +93,8 @@ namespace BERihalCodestackerChallenge2025.Controllers
         [Authorize(Roles = "Admin, Investigator")]
         public async Task<IActionResult> UpdateReportStatus(int id, [FromBody] string status)
         {
-            var report = await _context.CrimeReports.FindAsync(id);
-            if (report == null)
-                return NotFound("Report not found.");
-
-            report.Status = ReportStatus.resolved;
             
-            await _context.SaveChangesAsync();
-
+            return BadRequest("Update status feature not implemented yet in ReportService.");
         }
     }
 }
