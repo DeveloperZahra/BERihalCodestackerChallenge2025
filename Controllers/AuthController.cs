@@ -61,7 +61,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ============================================================
         //  Login and generate JWT token
         // ============================================================
-        [HttpPost("login")]
+        [HttpGet("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
