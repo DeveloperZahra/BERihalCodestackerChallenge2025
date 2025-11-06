@@ -1,13 +1,8 @@
-﻿using BERihalCodestackerChallenge2025.Data;
-using BERihalCodestackerChallenge2025.DTOs;
-using BERihalCodestackerChallenge2025.Model;
+﻿using BERihalCodestackerChallenge2025.DTOs;
+using BERihalCodestackerChallenge2025.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace BERihalCodestackerChallenge2025.Controllers
 {
@@ -15,84 +10,79 @@ namespace BERihalCodestackerChallenge2025.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IConfiguration _config;
+        private readonly IUserService _userService;
+        private readonly JwtService _jwtService;
 
-        public AuthController(AppDbContext context, IConfiguration config)
+        public AuthController(IUserService userService, JwtService jwtService)
         {
-            _context = context;
-            _config = config;
+            _userService = userService;
+            _jwtService = jwtService;
         }
 
-        // ================================================================
-        // POST: api/auth/register
-        // ================================================================
+        // ============================================================
+        // Register a new user
+        // ============================================================
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] UserCreateUpdateDto dto)
         {
-            if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
-                return Conflict("Email already exists.");
-
-            var user = new User
+            try
             {
-                Username = dto.Username,
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Role = Enum.Parse<Role>(dto.Role, true),
-                ClearanceLevel = Enum.Parse<Clearance>(dto.ClearanceLevel, true),
-                CreatedAt = DateTime.UtcNow
-            };
+                // Checking for a user with the same name or email
+                var exists = await _userService.ExistsByUsernameOrEmailAsync(dto.Username, dto.Email);
+                if (exists)
+                    return BadRequest(new { message = "Username or Email already exists." });
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+                // Create a new user
+                var user = await _userService.CreateAsync(new UserCreateUpdateDto
+                {
+                    Username = dto.Username,
+                    Email = dto.Email,
+                    Password = dto.Password,
+                    Role = dto.Role ?? "User",
+                    ClearanceLevel = dto.ClearanceLevel ?? "Low"
+                });
 
-            return Ok(new { Message = "User registered successfully" });
+                return Ok(new
+                {
+                    message = "User registered successfully.",
+                    user.Username,
+                    user.Email,
+                    user.Role,
+                    user.ClearanceLevel
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // ================================================================
-        // POST: api/auth/login
-        // ================================================================
+        // ============================================================
+        //  Login and generate JWT token
+        // ============================================================
         [HttpGet("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-                return Unauthorized("Invalid credentials.");
+            var user = await _userService.ValidateCredentialsAsync(dto.UsernameOrEmail, dto.Password);
 
-            var token = GenerateJwtToken(user);
-            return Ok(new { Token = token });
-        }
+            if (user == null)
+                return Unauthorized(new { message = "Invalid username or password" });
 
-        // ================================================================
-        // Helper: Generate JWT
-        // ================================================================
-        private string GenerateJwtToken(User user)
-        {
-            var jwtSettings = _config.GetSection("Jwt");
-            var key = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key is missing in configuration.");
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            // Generating JWT Token
+            var token = _jwtService.GenerateToken(user);
 
-
-            var claims = new[]
+            return Ok(new
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("role", user.Role.ToString()),
-                new Claim("clearance", user.ClearanceLevel.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["DurationInMinutes"])),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                message = "Login successful",
+                token,
+                user.Username,
+                user.Role,
+                user.ClearanceLevel
+            });
         }
     }
-}
 
+    
+}

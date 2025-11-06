@@ -13,6 +13,6 @@ namespace BERihalCodestackerChallenge2025.Services
         Task<UserReadDto?> GetByIdAsync(int id, CancellationToken ct = default);
         Task UpdateAsync(int id, UserCreateUpdateDto dto, CancellationToken ct = default);
         Task<User?> ValidateCredentialsAsync(string usernameOrEmail, string password);
-
+   
     }
 }

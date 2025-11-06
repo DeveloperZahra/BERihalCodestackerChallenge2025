@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BERihalCodestackerChallenge2025.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CrimeReportsController : ControllerBase
