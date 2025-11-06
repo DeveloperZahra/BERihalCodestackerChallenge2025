@@ -91,10 +91,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpPut("UpdateCrimeReportStatus/{id:int}")]
         [Authorize(Roles = "Admin, Investigator")]
-        public async Task<IActionResult> UpdateReportStatus(int id, [FromBody] string status)
-        {
-            
-            return BadRequest("Update status feature not implemented yet in ReportService.");
-        }
+        public async Task<IActionResult> UpdateReportStatus(int id, [FromBody] string status, CancellationToken ct)
+                      => await _reportService.UpdateStatusAsync(id, status, ct) ? Ok() : NotFound();
     }
 }

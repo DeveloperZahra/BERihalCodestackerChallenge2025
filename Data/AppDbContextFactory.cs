@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
+using System.Security.Claims;
+
 
 namespace BERihalCodestackerChallenge2025.Data
 {
-    // ✅ Design-time factory to let EF Core create DbContext during migrations
+    // Design-time factory to let EF Core create DbContext during migrations
     public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
         public AppDbContext CreateDbContext(string[] args)

@@ -10,7 +10,24 @@ namespace BERihalCodestackerChallenge2025.Data
     {
         public static void SeedDatabase(AppDbContext context) // Seed initial data into the database
         {
+            //---------------------
+            //   seed admin user 
+            //---------------------
 
+            if (!context.Users.Any(u => u.Role == "Admin"))
+            {
+                var admin = new User
+                {
+                    Username = "admin",
+                    Email = "admin@system.com",
+                    FullName = "System Admin",
+                    Role = "Admin",
+                    ClearanceLevel = "critical",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123")
+                };
+                context.Users.Add(admin);
+                context.SaveChanges();
+            }
 
 
             // ---------------------

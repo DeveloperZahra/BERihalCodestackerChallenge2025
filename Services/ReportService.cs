@@ -96,6 +96,20 @@ namespace BERihalCodestackerChallenge2025.Services
                 ReportDateTime = report.ReportDateTime // Timestamp of when the report was created
             };
         }
+
+
+
+        public async Task<bool> UpdateStatusAsync(int id, string status, CancellationToken ct)
+        {
+            var report = await _reports.GetByIdAsync(id, ct);
+            if (report == null) return false;
+
+            report.Status = status; 
+            await _uow.SaveChangesAsync(ct);
+            return true;
+        }
+
+
     }
 }
 

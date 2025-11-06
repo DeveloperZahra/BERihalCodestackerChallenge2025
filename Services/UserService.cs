@@ -124,5 +124,22 @@ namespace BERihalCodestackerChallenge2025.Services
             _users.Delete(user);
             await _uow.SaveChangesAsync(ct);
         }
+        //----------------------
+        // Validate Credentials
+        //----------------------
+        public async Task<User?> ValidateCredentialsAsync(string usernameOrEmail, string password)
+        {
+            var user = await _db.Users
+                .FirstOrDefaultAsync(u => u.Email == usernameOrEmail || u.Username == usernameOrEmail);
+
+            if (user == null)
+                return null;
+
+            
+            bool validPassword = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
+            return validPassword ? user : null;
+        }
+
     }
 }
