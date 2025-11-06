@@ -77,6 +77,12 @@ namespace BERihalCodestackerChallenge2025
                 };
             });
 
+
+            builder.Services.AddAuthentication("BasicAuthentication")
+           .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(
+               "BasicAuthentication", options => { });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -91,15 +97,27 @@ namespace BERihalCodestackerChallenge2025
             // builder.Services.AddAuthentication("Basic")
             //.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
 
-            builder.Services.AddAuthentication("BasicAuthentication")
-    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            //        builder.Services.AddAuthentication("BasicAuthentication")
+            //.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            //builder.Services.AddAuthentication("BasicAuthentication")
+            //.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(
+            //    "BasicAuthentication", options => { });
             //builder.Services.AddAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
+
+
+            //app.MapControllers();
+
+            //app.Run();
+            //var app = builder.Build();
+
+            //app.UseHttpsRedirection();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.MapControllers();
-
             app.Run();
 
 
