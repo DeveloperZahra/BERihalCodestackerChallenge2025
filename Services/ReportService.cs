@@ -104,7 +104,8 @@ namespace BERihalCodestackerChallenge2025.Services
             var report = await _reports.GetByIdAsync(id, ct);
             if (report == null) return false;
 
-            report.Status = status; 
+            report.Status = Enum.Parse<ReportStatus>(status, ignoreCase: true);
+
             await _uow.SaveChangesAsync(ct);
             return true;
         }

@@ -1,4 +1,5 @@
-﻿using BERihalCodestackerChallenge2025.DTOs;
+﻿using BERihalCodestackerChallenge2025.Data;
+using BERihalCodestackerChallenge2025.DTOs;
 using BERihalCodestackerChallenge2025.Model;
 using BERihalCodestackerChallenge2025.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +8,15 @@ namespace BERihalCodestackerChallenge2025.Services
 {
     public class CaseService : ICaseService 
     {
-        private readonly IUnitOfWork _uow; 
+        private readonly AppDbContext _db;
+        //  private readonly IUnitOfWork _uow; 
         private readonly IGenericRepository<Case> _cases; 
 
-        public CaseService(IUnitOfWork uow, IGenericRepository<Case> casesRepo) 
+        public CaseService(AppDbContext db, IGenericRepository<Case> casesRepo) 
         {
-            _uow = uow;
+          //  _uow = uow;
             _cases = casesRepo;
+            _db = db;
         }
         //==========================
         //    create new case
@@ -38,21 +41,22 @@ namespace BERihalCodestackerChallenge2025.Services
             };
 
             await _cases.AddAsync(entity, ct);        
-            await _uow.SaveChangesAsync(ct);         // 
+            await _db.SaveChangesAsync(ct);         // 
 
             return (entity.CaseId, entity.CaseNumber);
         }
-        //==========================
-        // get all cases with optional search query
-        //==========================
+        // ==========================
+        // Get all cases with optional search query
+        // ==========================
         public async Task<IEnumerable<CaseListItemDto>> GetAllAsync(string? q, CancellationToken ct = default)
         {
-            var query = _uow.Query<Case>()
-                .AsNoTracking()
+            
+            var query = _db.Cases
+                .AsNoTracking() 
                 .Include(c => c.CreatedByUser)
-                .OrderByDescending(c => c.CreatedAt)
                 .AsQueryable();
 
+           
             if (!string.IsNullOrWhiteSpace(q))
             {
                 var term = q.Trim().ToLower();
@@ -70,20 +74,29 @@ namespace BERihalCodestackerChallenge2025.Services
                 CreatedBy = c.CreatedByUser.Username,
                 CreatedAt = c.CreatedAt,
                 CaseType = c.CaseType,
-                AuthorizationLevel = c.AuthorizationLevel
+                AuthorizationLevel = c.AuthorizationLevel.ToString()
             }).ToListAsync(ct);
 
             return list;
         }
 
+        // ==========================
+        // Helper method to truncate description text
+        // ==========================
         private static string TruncateWithWordBoundary(string? text, int max)
         {
-            if (string.IsNullOrWhiteSpace(text)) return text ?? "";
-            if (text.Length <= max) return text;
+            if (string.IsNullOrWhiteSpace(text))
+                return string.Empty;
+
+            if (text.Length <= max)
+                return text;
+
             var slice = text[..max];
             var lastSpace = slice.LastIndexOf(' ');
+
             return (lastSpace > 0 ? slice[..lastSpace] : slice) + " ...";
         }
+
         //==========================
         //       delete case
         //==========================
@@ -93,7 +106,7 @@ namespace BERihalCodestackerChallenge2025.Services
             if (entity == null) return false;
 
             _cases.Delete(entity);
-            await _uow.SaveChangesAsync(ct);
+            await _db.SaveChangesAsync(ct);
             return true;
         }
 

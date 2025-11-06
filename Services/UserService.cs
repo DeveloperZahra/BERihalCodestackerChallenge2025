@@ -1,4 +1,6 @@
 ﻿// Services/UserService.cs
+using Microsoft.EntityFrameworkCore;
+using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.DTOs;
 using BERihalCodestackerChallenge2025.Model;
 using BERihalCodestackerChallenge2025.Repositories;
@@ -8,12 +10,13 @@ namespace BERihalCodestackerChallenge2025.Services
     // Service for managing user-related operations
     public class UserService : IUserService
     {
-        private readonly IUnitOfWork _uow;
+        private readonly AppDbContext _db;
+        //private readonly IUnitOfWork _uow;
         private readonly IGenericRepository<User> _users;
 
-        public UserService(IUnitOfWork uow, IGenericRepository<User> usersRepo)
+        public UserService(AppDbContext db, IGenericRepository<User> usersRepo)
         {
-            _uow = uow;
+            _db = db;
             _users = usersRepo;
         }
 
@@ -38,7 +41,7 @@ namespace BERihalCodestackerChallenge2025.Services
             };
 
             await _users.AddAsync(user, ct);
-            await _uow.SaveChangesAsync(ct);
+            await _db.SaveChangesAsync(ct);
 
             return new UserReadDto
             {
@@ -114,7 +117,7 @@ namespace BERihalCodestackerChallenge2025.Services
                 user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
             _users.Update(user);
-            await _uow.SaveChangesAsync(ct);
+            await _db.SaveChangesAsync(ct);
         }
         public async Task DeleteAsync(int id, CancellationToken ct = default)
         {
@@ -122,7 +125,7 @@ namespace BERihalCodestackerChallenge2025.Services
                        ?? throw new KeyNotFoundException("User not found.");
 
             _users.Delete(user);
-            await _uow.SaveChangesAsync(ct);
+            await _db.SaveChangesAsync(ct);
         }
         //----------------------
         // Validate Credentials

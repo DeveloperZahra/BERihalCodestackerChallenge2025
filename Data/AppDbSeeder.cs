@@ -14,15 +14,16 @@ namespace BERihalCodestackerChallenge2025.Data
             //   seed admin user 
             //---------------------
 
-            if (!context.Users.Any(u => u.Role == "Admin"))
+            if (!context.Users.Any(u => u.Role == Role.Admin))
+
             {
                 var admin = new User
                 {
                     Username = "admin",
                     Email = "admin@system.com",
                     FullName = "System Admin",
-                    Role = "Admin",
-                    ClearanceLevel = "critical",
+                    Role = Role.Admin,
+                    ClearanceLevel = Clearance.high,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123")
                 };
                 context.Users.Add(admin);

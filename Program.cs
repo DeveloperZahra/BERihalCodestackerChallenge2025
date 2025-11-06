@@ -88,9 +88,12 @@ namespace BERihalCodestackerChallenge2025
 
             app.UseHttpsRedirection();
 
-            builder.Services.AddAuthentication("Basic")
-           .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
+            // builder.Services.AddAuthentication("Basic")
+            //.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
 
+            builder.Services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            //builder.Services.AddAuthorization();
             app.UseAuthentication();
             app.UseAuthorization();
 
