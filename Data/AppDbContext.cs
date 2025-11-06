@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Emit;
 
 
+
 namespace BERihalCodestackerChallenge2025.Data
 {
     // DbContext 

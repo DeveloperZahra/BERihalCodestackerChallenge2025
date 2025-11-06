@@ -84,11 +84,8 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpGet("GetAllCases")]
         [Authorize(Roles = "Admin,Investigator,Officer")]
-        public async Task<IActionResult> GetAllCases()
-        {
-            
-            return BadRequest("Get all cases not implemented yet in CaseService.");
-        }
+        public async Task<IActionResult> GetAllCases([FromQuery] string? q, CancellationToken ct)
+                      => Ok(await _caseService.GetAllAsync(q, ct));
 
         // ================================================================
         // DELETE: api/cases/{id}
@@ -96,10 +93,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ================================================================
         [HttpDelete("DeleteCase/{id:int}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteCase(int id)
-        {
-           
-            return BadRequest("Delete case feature not implemented yet in CaseService.");
-        }
+        public async Task<IActionResult> DeleteCase(int id, CancellationToken ct)
+                    => await _caseService.DeleteAsync(id, ct) ? Ok() : NotFound();
     }
 }
