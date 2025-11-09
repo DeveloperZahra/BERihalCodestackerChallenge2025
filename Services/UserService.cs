@@ -34,6 +34,7 @@ namespace BERihalCodestackerChallenge2025.Services
             {
                 Username = dto.Username,
                 Email = dto.Email,
+                FullName = dto.FullName,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 Role = role,
                 ClearanceLevel = level,
@@ -48,6 +49,7 @@ namespace BERihalCodestackerChallenge2025.Services
                 Id = user.UserId,
                 Username = user.Username,
                 Email = user.Email,
+                FullName = dto.FullName,
                 Role = user.Role.ToString(),
                 ClearanceLevel = user.ClearanceLevel.ToString(),
                 CreatedAt = user.CreatedAt
