@@ -29,7 +29,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public Role Role { get; set; } // User's role in the system
 
         [Required]
-        public Clearance ClearanceLevel { get; set; } = Clearance.low;// User's clearance level
+        public Clearance ClearanceLevel { get; set; }// User's clearance level
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp of user creation
