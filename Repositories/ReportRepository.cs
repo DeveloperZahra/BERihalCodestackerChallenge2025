@@ -13,5 +13,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
             => _db.CrimeReports
                   .Include(r => r.ReportedByUser) // Include the user who reported the crime
                   .FirstOrDefaultAsync(r => r.TrackingCode == trackingCode, ct); // Find the report by tracking code
+
+
     }
 }

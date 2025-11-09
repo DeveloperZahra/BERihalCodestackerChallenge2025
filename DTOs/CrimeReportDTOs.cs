@@ -21,4 +21,15 @@
         public string? ReportedBy { get; set; }
         public DateTime ReportDateTime { get; set; }
     }
+
+    public class CrimeReportListDto
+    {
+        public int Id { get; set; }
+        public string ReporterName { get; set; }
+        public string TrackingCode { get; set; }
+        public string Status { get; set; }
+        public string Description { get; set; }
+        public string AreaCity { get; set; }
+        public DateTime ReportedAt { get; set; }
+    }
 }
