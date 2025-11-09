@@ -56,10 +56,10 @@ namespace BERihalCodestackerChallenge2025.Controllers
         }
 
         // ================================================================
-        // GET: api/users/GetUserById/{id}
+        // Post: api/users/GetUserById/{id}
         // Description: Retrieve a single user by ID
         // ================================================================
-        [HttpGet("GetUserById/{id:int}")]
+        [HttpPost("GetUserById/{id:int}")] // Using POST to avoid exposing user IDs in URL
         public async Task<ActionResult<UserReadDto>> GetUserById(int id, CancellationToken ct)
         {
             var user = await _userService.GetByIdAsync(id, ct);
