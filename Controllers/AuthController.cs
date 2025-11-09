@@ -38,6 +38,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
                 {
                     Username = dto.Username,
                     Email = dto.Email,
+                    FullName = dto.FullName,
                     Password = dto.Password,
                     Role = dto.Role ?? "User",
                     ClearanceLevel = dto.ClearanceLevel ?? "Low"
@@ -54,6 +55,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
             }
             catch (Exception ex)
             {
+                var baseEx = ex.GetBaseException();
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -61,7 +63,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // ============================================================
         //  Login and generate JWT token
         // ============================================================
-        [HttpGet("login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
