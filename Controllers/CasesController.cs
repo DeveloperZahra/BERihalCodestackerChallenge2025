@@ -14,9 +14,9 @@ namespace BERihalCodestackerChallenge2025.Controllers
     public class CasesController : ControllerBase
     {
 
-        private readonly CaseService _caseService;
+        private readonly ICaseService _caseService;
 
-        public CasesController(CaseService caseService)
+        public CasesController(ICaseService caseService)
         {
             _caseService = caseService;
         }
@@ -110,7 +110,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // PUT: api/cases/{id}
         // Description: Update an existing case (Admin or Investigator)
         // ================================================================
-        [HttpPut("UpdateCase/{id:int}")]
+        [HttpPut("UpdateCaseById")]
         [Authorize(Roles = "Admin,Investigator")]
         public async Task<IActionResult> UpdateCase(int id, [FromBody] CaseUpdateDto dto, CancellationToken ct)
         {
@@ -147,7 +147,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // DELETE: api/cases/{id}
         // Description: Delete a case (Admin only)
         // ================================================================
-        [HttpDelete("DeleteCase/{id:int}")]
+        [HttpDelete("DeleteCaseById")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCase(int id, CancellationToken ct)
         {

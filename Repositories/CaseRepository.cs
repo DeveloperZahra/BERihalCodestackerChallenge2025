@@ -42,7 +42,7 @@ namespace BERihalCodestackerChallenge2025.Repositories
         public Task<Case?> GetDetailsAsync(int id, CancellationToken ct = default)
             => _db.Cases
                   .Include(c => c.CreatedByUser) // Include the user who created the case
-                  .Include(c => c.Assignees).ThenInclude(a => a.User) // Include assigned users
+                  .Include(c => c.CaseAssignees).ThenInclude(a => a.User) // Include assigned users
                   .Include(c => c.Evidences) // Include evidences linked to the case
                   .Include(c => c.Participants).ThenInclude(p => p.Participant) // Include participants involved in the case
                   .Include(c => c.LinkedReports).ThenInclude(l => l.Report).ThenInclude(r => r.ReportedByUser) // Include linked reports and their reporting users

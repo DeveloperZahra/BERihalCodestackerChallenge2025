@@ -14,9 +14,9 @@ namespace BERihalCodestackerChallenge2025.Controllers
     [Route("api/[controller]")]
     public class CrimeReportsController : ControllerBase
     {
-        private readonly ReportService _reportService;
+        private readonly IReportService _reportService;
 
-        public CrimeReportsController(ReportService reportService)
+        public CrimeReportsController(IReportService reportService)
         {
             _reportService = reportService;
         }
@@ -281,7 +281,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // PUT: api/crimereports/{id}/status
         // Description: Admin / Investigator can update report status
         // ================================================================
-        [HttpPut("UpdateCrimeReportStatus/{id:int}")]
+        [HttpPut("UpdateCrimeReportStatus")]
         [Authorize(Roles = "Admin, Investigator")]
         public async Task<IActionResult> UpdateReportStatus(int id, [FromBody] string status, CancellationToken ct)
         {
