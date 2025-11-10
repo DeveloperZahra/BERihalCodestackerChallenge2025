@@ -28,6 +28,7 @@ namespace BERihalCodestackerChallenge2025.Model
 
         // Citizen = NULL
         public int? ReportedByUserId { get; set; } // Foreign key to the user who reported the crime
+
         [ForeignKey(nameof(ReportedByUserId))] // Navigation property to the reporting user
         public User? ReportedByUser { get; set; } // The user who reported the crime
 
@@ -42,6 +43,7 @@ namespace BERihalCodestackerChallenge2025.Model
         [RegularExpression(@"^[A-Z]{2,4}-\d{4}-\d{3,6}$")] // CR-2025-001234
         public string TrackingCode { get; set; } = default!; // Unique tracking code for the report
 
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp of report creation
         public ICollection<CaseReport>? CaseLinks { get; set; } // Links to cases associated with this report
     }
 }

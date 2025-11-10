@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BERihalCodestackerChallenge2025.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251105053840_init")]
-    partial class init
+    [Migration("20251110062603_initmigration")]
+    partial class initmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,9 +106,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CaseId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("ClearanceLevel")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -123,8 +120,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CaseAssigneeId");
-
-                    b.HasIndex("CaseId1");
 
                     b.HasIndex("UserId");
 
@@ -214,6 +209,9 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -455,10 +453,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BERihalCodestackerChallenge2025.Model.Case", null)
-                        .WithMany("Assignees")
-                        .HasForeignKey("CaseId1");
-
                     b.HasOne("BERihalCodestackerChallenge2025.Model.User", "User")
                         .WithMany("CaseAssignees")
                         .HasForeignKey("UserId")
@@ -571,8 +565,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
             modelBuilder.Entity("BERihalCodestackerChallenge2025.Model.Case", b =>
                 {
-                    b.Navigation("Assignees");
-
                     b.Navigation("CaseAssignees");
 
                     b.Navigation("CaseParticipants");

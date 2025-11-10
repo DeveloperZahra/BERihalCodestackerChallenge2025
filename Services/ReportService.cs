@@ -1,4 +1,5 @@
 ﻿// Services/ReportService.cs
+using BERihalCodestackerChallenge2025.Data;
 using BERihalCodestackerChallenge2025.DTOs;
 using BERihalCodestackerChallenge2025.Model;
 using BERihalCodestackerChallenge2025.Repositories;
@@ -8,18 +9,47 @@ namespace BERihalCodestackerChallenge2025.Services
 {
     public class ReportService : IReportService // Service for handling crime report submissions and status retrieval
     {
-        private readonly IUnitOfWork _uow; // Unit of Work for managing repositories and transactions
+        private readonly AppDbContext _db; // Unit of Work for managing repositories and transactions
         private readonly IGenericRepository<CrimeReport> _reports; // Repository for crime reports
         private readonly IGenericRepository<User> _users;  // Repository for users       
 
-        public ReportService( 
-            IUnitOfWork uow,
+        public ReportService(
+            AppDbContext db,
             IGenericRepository<CrimeReport> reportsRepo, 
             IGenericRepository<User> usersRepo) 
         {
-            _uow = uow; 
+            _db = db; 
             _reports = reportsRepo; 
             _users = usersRepo; 
+        }
+        public async Task<IEnumerable<CrimeReportListDto>> GetAllAsync(CancellationToken ct = default)
+        {
+            try
+            {
+                var reports = await _db.CrimeReports
+                    .AsNoTracking()
+                    .OrderByDescending(r => r.CreatedAt)
+                    .Select(r => new CrimeReportListDto
+                    {
+                        Id = r.Id,
+                        ReporterName = r.Title,           
+                        TrackingCode = r.TrackingCode,
+                        Status = r.Status.ToString(),   
+                        Description = r.Description,
+                        AreaCity = r.AreaCity,
+                        ReportedAt = r.CreatedAt
+                    })
+                    .ToListAsync(ct);
+
+                if (reports == null || !reports.Any())
+                    throw new KeyNotFoundException("No crime reports found in the system.");
+
+                return reports;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to retrieve crime reports: {ex.Message}", ex);
+            }
         }
 
 
@@ -47,11 +77,13 @@ namespace BERihalCodestackerChallenge2025.Services
                 Longitude = dto.Longitude, // Geographic coordinates of the crime location
                 Status = ReportStatus.pending, // Initial status of the report
                 TrackingCode = tracking, // Set the generated tracking code
-                ReportedByUserId = dto.ReportedByUserId // Set the reporting user ID
+                ReportedByUserId = dto.ReportedByUserId, // Set the reporting user ID
+                CreatedAt = DateTime.UtcNow // Set the creation timestamp
+
             };
 
             await _reports.AddAsync(entity, ct);  // Add the new report to the repository
-            await _uow.SaveChangesAsync(ct);     // Save changes to the database 
+            await _db.SaveChangesAsync(ct);     // Save changes to the database 
 
             return new CrimeReportStatusDto // Return the status of the submitted report
             {
@@ -76,8 +108,10 @@ namespace BERihalCodestackerChallenge2025.Services
             }
             else
             {
-               
-                report = await _uow.Reports.GetByTrackingCodeAsync(idOrTracking, ct); // Retrieve the report by tracking code
+
+                report = await _db.CrimeReports
+                      .AsNoTracking()
+                      .FirstOrDefaultAsync(r => r.TrackingCode == idOrTracking, ct);// Retrieve the report by tracking code
             }
 
             if (report is null) return null; // Return null if the report is not found
@@ -106,7 +140,7 @@ namespace BERihalCodestackerChallenge2025.Services
 
             report.Status = Enum.Parse<ReportStatus>(status, ignoreCase: true);
 
-            await _uow.SaveChangesAsync(ct);
+            await _db.SaveChangesAsync(ct);
             return true;
         }
 

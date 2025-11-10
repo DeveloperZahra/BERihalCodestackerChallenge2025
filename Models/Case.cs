@@ -28,7 +28,7 @@ namespace BERihalCodestackerChallenge2025.Model
         public string AreaCity { get; set; } = default!; // Area or city where the case is being handled
 
         [Required, MaxLength(80)] // Type of the case
-        public string CaseType { get; set; } = "General"; // Type/category of the case
+        public string CaseType { get; set; }  // Type/category of the case
 
         [Required]
         public Clearance AuthorizationLevel { get; set; } = Clearance.low; // Required clearance level to access the case
@@ -48,12 +48,12 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required]
         public DateTime? UpdatedAt { get; set; } 
 
-        public ICollection<CaseAssignee>? Assignees { get; set; } // Users assigned to the case
+       
         public ICollection<Evidence>? Evidences { get; set; } // Evidences linked to the case
         public ICollection<CaseParticipant>? Participants { get; set; } //  Participants involved in the case
         public ICollection<CaseReport>? LinkedReports { get; set; } // Reports linked to the case
         public ICollection<CaseParticipant> CaseParticipants { get; set; }
-        public ICollection<CaseAssignee> CaseAssignees { get; set; }
+        public ICollection<CaseAssignee> CaseAssignees { get; set; }// Users assigned to the case
 
     }
 }

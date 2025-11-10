@@ -61,6 +61,8 @@ namespace BERihalCodestackerChallenge2025
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            builder.Services.AddControllers();
+
             // Domain services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IReportService, ReportService>();
@@ -71,7 +73,7 @@ namespace BERihalCodestackerChallenge2025
 
             builder.Services.AddScoped<JwtService>();
 
-            builder.Services.AddControllers();
+           
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

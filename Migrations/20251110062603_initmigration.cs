@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BERihalCodestackerChallenge2025.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,7 +90,8 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     ReportedByUserId = table.Column<int>(type: "int", nullable: true),
                     Latitude = table.Column<decimal>(type: "decimal(9,6)", precision: 9, scale: 6, nullable: true),
                     Longitude = table.Column<decimal>(type: "decimal(9,6)", precision: 9, scale: 6, nullable: true),
-                    TrackingCode = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false)
+                    TrackingCode = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,7 +115,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     ProgressStatus = table.Column<int>(type: "int", nullable: false),
                     ClearanceLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssignedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CaseId1 = table.Column<int>(type: "int", nullable: true),
                     UserId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -126,11 +126,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         principalTable: "Cases",
                         principalColumn: "CaseId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CaseAssignees_Cases_CaseId1",
-                        column: x => x.CaseId1,
-                        principalTable: "Cases",
-                        principalColumn: "CaseId");
                     table.ForeignKey(
                         name: "FK_CaseAssignees_Users_UserId",
                         column: x => x.UserId,
@@ -279,11 +274,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                 table: "CaseAssignees",
                 columns: new[] { "CaseId", "UserId" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CaseAssignees_CaseId1",
-                table: "CaseAssignees",
-                column: "CaseId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CaseAssignees_UserId",
