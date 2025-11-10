@@ -51,6 +51,9 @@ namespace BERihalCodestackerChallenge2025.Controllers
                     CaseId = caseId,
                     CaseNumber = caseNumber
                 });
+
+               
+                
             }
             catch (ArgumentException ex)
             {
@@ -67,22 +70,37 @@ namespace BERihalCodestackerChallenge2025.Controllers
         // Description: Return list of all cases with 100-char trimmed description
         // ================================================================
         [HttpGet("GetAllCases")]
-        [Authorize(Roles = "Admin,Investigator,Officer")]
-        public async Task<IActionResult> GetAllCases([FromQuery] string? q, CancellationToken ct)
+        [Authorize(Roles = "Admin, Investigator, Officer")]
+        public async Task<IActionResult> GetAllCases(CancellationToken ct)
         {
             try
             {
-                var cases = await _caseService.GetAllAsync(q, ct);
+                // Call in service to bring up all issues
+                var cases = await _caseService.GetAllAsync(ct);
+
+                // Check for data
                 if (cases == null || !cases.Any())
                     return NotFound(new { Message = "No cases found." });
 
+                // Return result successfully
                 return Ok(cases);
+            }
+            catch (OperationCanceledException)
+            {
+                // If the transaction is cancelled using the CancellationToken
+                return StatusCode(499, new { Message = "Request was cancelled by the client." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "Failed to retrieve cases.", Details = ex.Message });
+                // Any unexpected error
+                return StatusCode(500, new
+                {
+                    Message = "An error occurred while retrieving cases.",
+                    Details = ex.Message
+                });
             }
         }
+
 
         // ================================================================
         // GET: api/cases/GetCaseById/{id}
