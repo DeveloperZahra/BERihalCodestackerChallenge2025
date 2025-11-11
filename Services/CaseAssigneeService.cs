@@ -47,24 +47,32 @@ namespace BERihalCodestackerChallenge2025.Services
                 AssignedRole = "Officer",
                 ProgressStatus = CaseStatus.pending,
                 AssignedAt = DateTime.UtcNow,
-                UpdatedAt = null
+                UpdatedAt = DateTime.UtcNow
+
             };
 
             //save — We use DbContext directly to avoid GenericRepository interface differences
             _db.CaseAssignees.Add(entity);
             await _db.SaveChangesAsync(ct);
 
+            var loadedEntity = await _db.CaseAssignees
+               .Include(a => a.User)
+               .Include(a => a.Case)
+              .FirstOrDefaultAsync(a => a.CaseAssigneeId == entity.CaseAssigneeId, ct);
+
             // map to read dto (lightweight projection)
             return new CaseAssigneeReadDto
             {
-                CaseAssigneeId = entity.CaseAssigneeId,
-                CaseId = entity.CaseId,
-                UserId = entity.UserId,
-                ClearanceLevel = entity.ClearanceLevel,
-                AssignedRole = entity.AssignedRole,
-                ProgressStatus = entity.ProgressStatus.ToString(),
-                AssignedAt = entity.AssignedAt,
-                UpdatedAt = entity.UpdatedAt
+                CaseAssigneeId = loadedEntity.CaseAssigneeId,
+                CaseId = loadedEntity.CaseId,
+                UserId = loadedEntity.UserId,
+                UserFullName = loadedEntity.User?.FullName,
+                UserRole = loadedEntity.User?.Role.ToString(),
+                ClearanceLevel = loadedEntity.ClearanceLevel,
+                AssignedRole = loadedEntity.AssignedRole,
+                ProgressStatus = loadedEntity.ProgressStatus.ToString(),
+                AssignedAt = loadedEntity.AssignedAt,
+                UpdatedAt = loadedEntity.UpdatedAt
             };
         }
 
