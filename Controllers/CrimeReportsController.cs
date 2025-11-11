@@ -167,7 +167,7 @@ namespace BERihalCodestackerChallenge2025.Controllers
                 //  1. Attempt to retrieve all reports from service
                 var reports = await _reportService.GetAllAsync(ct);
 
-                // ⚠️ 2. Handle if no reports found
+                //  2. Handle if no reports found
                 if (reports == null || !reports.Any())
                     return NotFound(new
                     {

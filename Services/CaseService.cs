@@ -29,7 +29,7 @@ namespace BERihalCodestackerChallenge2025.Services
 
             var entity = new Case
             {
-                CaseNumber = $"CASE-{DateTime.UtcNow:yyyy}-{Random.Shared.Next(1, 999999):000000}", //
+                CaseNumber = $"CASE-{DateTime.UtcNow:yyyy}-{Random.Shared.Next(1, 999999):000000}",
                 Name = dto.Name,
                 Description = dto.Description,
                 AreaCity = dto.AreaCity,
@@ -37,7 +37,8 @@ namespace BERihalCodestackerChallenge2025.Services
                 AuthorizationLevel = level,
                 Status = CaseStatus.pending,
                 CreatedByUserId = createdByUserId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             await _cases.AddAsync(entity, ct);
@@ -48,37 +49,25 @@ namespace BERihalCodestackerChallenge2025.Services
         // ==========================
         // Get all cases with optional search query
         // ==========================
-        public async Task<IEnumerable<CaseListItemDto>> GetAllAsync(string? q, CancellationToken ct = default)
+        public async Task<IEnumerable<CaseReadDto>> GetAllAsync(CancellationToken ct)
         {
-
-            var query = _db.Cases
+            return await _db.Cases
                 .AsNoTracking()
                 .Include(c => c.CreatedByUser)
-                .AsQueryable();
-
-
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                var term = q.Trim().ToLower();
-                query = query.Where(c =>
-                    EF.Functions.Like(c.Name.ToLower(), $"%{term}%") ||
-                    EF.Functions.Like(c.Description.ToLower(), $"%{term}%"));
-            }
-
-            var list = await query.Select(c => new CaseListItemDto
-            {
-                CaseNumber = c.CaseNumber,
-                Name = c.Name,
-                Description = TruncateWithWordBoundary(c.Description, 100),
-                AreaCity = c.AreaCity,
-                CreatedBy = c.CreatedByUser.Username,
-                CreatedAt = c.CreatedAt,
-                CaseType = c.CaseType,
-                AuthorizationLevel = c.AuthorizationLevel.ToString()
-            }).ToListAsync(ct);
-
-            return list;
+                .Include(c => c.CrimeReports)
+                .OrderByDescending(c => c.CreatedAt)
+                .Select(c => new CaseReadDto
+                {
+                    CaseId = c.CaseId,
+                    Name = c.Name,
+                    Description = c.Description,
+                    CreatedAt = c.CreatedAt,
+                    CreatedByUserName = c.CreatedByUser.FullName,
+                    CrimeReportsCount = c.CrimeReports.Count
+                })
+                .ToListAsync(ct);
         }
+
         // ==========================================================
         //  Get Case By ID
         // ==========================================================

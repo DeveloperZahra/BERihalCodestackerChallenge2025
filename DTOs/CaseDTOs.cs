@@ -45,5 +45,15 @@
         public DateTime AssignedAt { get; set; }
     }
 
+    public class CaseReadDto
+    {
+        public int CaseId { get; set; }              
+        public string Name { get; set; } = string.Empty; 
+        public string? Description { get; set; }       
+        public DateTime CreatedAt { get; set; }          
+        public string CreatedByUserName { get; set; } = string.Empty; 
+        public int CrimeReportsCount { get; set; }       
+    }
+
 
 }

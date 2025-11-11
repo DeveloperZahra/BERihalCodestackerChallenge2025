@@ -37,6 +37,9 @@ namespace BERihalCodestackerChallenge2025.Model
 
         [Required]
         public DateTime AssignedAt { get; set; } = DateTime.UtcNow; // Timestamp of when the user was assigned to the case
+
+        [Required]
+        public DateTime? UpdatedAt { get; set; } // Nullable to allow null for new records
     }
 
 }
