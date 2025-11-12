@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BERihalCodestackerChallenge2025.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251110062603_initmigration")]
-    partial class initmigration
+    [Migration("20251112035631_MakeActedByNullable")]
+    partial class MakeActedByNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,6 +113,9 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.Property<int>("ProgressStatus")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -210,6 +213,9 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
+                    b.Property<int?>("CaseId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -247,6 +253,8 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CaseId");
+
                     b.HasIndex("ReportedByUserId");
 
                     b.HasIndex("Status");
@@ -277,6 +285,9 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.Property<string>("FileUrl")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("IsSoftDeleted")
                         .HasColumnType("bit");
@@ -324,6 +335,10 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
                     b.Property<DateTime>("ActedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ActedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("ActedByUserId")
                         .HasColumnType("int");
@@ -518,6 +533,10 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
             modelBuilder.Entity("BERihalCodestackerChallenge2025.Model.CrimeReport", b =>
                 {
+                    b.HasOne("BERihalCodestackerChallenge2025.Model.Case", null)
+                        .WithMany("CrimeReports")
+                        .HasForeignKey("CaseId");
+
                     b.HasOne("BERihalCodestackerChallenge2025.Model.User", "ReportedByUser")
                         .WithMany()
                         .HasForeignKey("ReportedByUserId");
@@ -568,6 +587,8 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     b.Navigation("CaseAssignees");
 
                     b.Navigation("CaseParticipants");
+
+                    b.Navigation("CrimeReports");
 
                     b.Navigation("Evidences");
 

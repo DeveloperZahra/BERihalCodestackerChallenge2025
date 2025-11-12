@@ -70,10 +70,16 @@ namespace BERihalCodestackerChallenge2025.Data
                 .HasForeignKey(e => e.CaseId).OnDelete(DeleteBehavior.NoAction); // Cascade delete evidences when case is deleted
 
             b.Entity<EvidenceAuditLog>()
-                .HasOne(a => a.Evidence).WithMany(e => e.Audit)
-                .HasForeignKey(a => a.EvidenceId).OnDelete(DeleteBehavior.NoAction); // Cascade delete audit logs when evidence is deleted
+                .HasOne(a => a.Evidence)
+                .WithMany(e => e.Audit)
+                .HasForeignKey(a => a.EvidenceId)
+                .OnDelete(DeleteBehavior.NoAction); // Cascade delete audit logs when evidence is deleted
 
-    
+            b.Entity<EvidenceAuditLog>()
+                 .Property(p => p.ActedBy)
+                 .HasMaxLength(200)
+                 .IsRequired(false);
+
         }
     }
 }

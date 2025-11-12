@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BERihalCodestackerChallenge2025.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251110113101_AddUpdatedAtToCaseAssignee")]
-    partial class AddUpdatedAtToCaseAssignee
+    [Migration("20251111072520_FixCascadeDeleteIssue")]
+    partial class FixCascadeDeleteIssue
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -286,6 +286,9 @@ namespace BERihalCodestackerChallenge2025.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<bool>("IsSoftDeleted")
                         .HasColumnType("bit");
 
@@ -332,6 +335,10 @@ namespace BERihalCodestackerChallenge2025.Migrations
 
                     b.Property<DateTime>("ActedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ActedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ActedByUserId")
                         .HasColumnType("int");

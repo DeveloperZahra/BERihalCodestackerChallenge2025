@@ -35,6 +35,8 @@ namespace BERihalCodestackerChallenge2025.Model
         [MaxLength(1024), Url] // URL to the file, if applicable
         public string? FileUrl { get; set; } // URL to the file, if applicable
 
+        public byte[]? ImageData { get; set; } // Binary data for image evidence, if applicable
+
         [MaxLength(128)] // File name, if applicable
         public string? MimeType { get; set; } // MIME type of the file, if applicable
 
