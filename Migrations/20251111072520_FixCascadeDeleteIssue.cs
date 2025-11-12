@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BERihalCodestackerChallenge2025.Migrations
 {
     /// <inheritdoc />
-    public partial class initmigration : Migration
+    public partial class FixCascadeDeleteIssue : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,33 +77,6 @@ namespace BERihalCodestackerChallenge2025.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CrimeReports",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
-                    AreaCity = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    ReportDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    ReportedByUserId = table.Column<int>(type: "int", nullable: true),
-                    Latitude = table.Column<decimal>(type: "decimal(9,6)", precision: 9, scale: 6, nullable: true),
-                    Longitude = table.Column<decimal>(type: "decimal(9,6)", precision: 9, scale: 6, nullable: true),
-                    TrackingCode = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CrimeReports", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CrimeReports_Users_ReportedByUserId",
-                        column: x => x.ReportedByUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CaseAssignees",
                 columns: table => new
                 {
@@ -115,6 +88,7 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     ProgressStatus = table.Column<int>(type: "int", nullable: false),
                     ClearanceLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssignedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -180,6 +154,39 @@ namespace BERihalCodestackerChallenge2025.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CrimeReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
+                    AreaCity = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    ReportDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    ReportedByUserId = table.Column<int>(type: "int", nullable: true),
+                    Latitude = table.Column<decimal>(type: "decimal(9,6)", precision: 9, scale: 6, nullable: true),
+                    Longitude = table.Column<decimal>(type: "decimal(9,6)", precision: 9, scale: 6, nullable: true),
+                    TrackingCode = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CaseId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrimeReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CrimeReports_Cases_CaseId",
+                        column: x => x.CaseId,
+                        principalTable: "Cases",
+                        principalColumn: "CaseId");
+                    table.ForeignKey(
+                        name: "FK_CrimeReports_Users_ReportedByUserId",
+                        column: x => x.ReportedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Evidences",
                 columns: table => new
                 {
@@ -190,6 +197,7 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     Type = table.Column<int>(type: "int", nullable: false),
                     TextContent = table.Column<string>(type: "nvarchar(max)", maxLength: 8000, nullable: true),
                     FileUrl = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     MimeType = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     SizeBytes = table.Column<long>(type: "bigint", nullable: true),
                     IsSoftDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -250,6 +258,7 @@ namespace BERihalCodestackerChallenge2025.Migrations
                     EvidenceId = table.Column<int>(type: "int", nullable: false),
                     Action = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                     ActedByUserId = table.Column<int>(type: "int", nullable: false),
+                    ActedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ActedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Details = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
@@ -336,6 +345,11 @@ namespace BERihalCodestackerChallenge2025.Migrations
                 name: "IX_Cases_Status",
                 table: "Cases",
                 column: "Status");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrimeReports_CaseId",
+                table: "CrimeReports",
+                column: "CaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CrimeReports_ReportedByUserId",

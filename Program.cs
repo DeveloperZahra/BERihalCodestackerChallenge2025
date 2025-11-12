@@ -71,6 +71,8 @@ namespace BERihalCodestackerChallenge2025
             builder.Services.AddScoped<IAuditLogService, AuditLogService>();
             builder.Services.AddScoped<UnitServices>();
             builder.Services.AddScoped<ICaseAssigneeService, CaseAssigneeService>();
+            builder.Services.AddScoped<IParticipantService, ParticipantService>();
+
 
 
             builder.Services.AddScoped<JwtService>();

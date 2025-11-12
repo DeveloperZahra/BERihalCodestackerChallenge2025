@@ -27,6 +27,7 @@ namespace BERihalCodestackerChallenge2025.Model
         [Required]
         public int ActedByUserId { get; set; } // Foreign key to the user who performed the action
 
+        public string? ActedBy { get; set; }  // Redundant field to store the username of the user who performed the action
         public User ActedByUser { get; set; } = default!; // Navigation property to the user who performed the action
 
         [Required]
